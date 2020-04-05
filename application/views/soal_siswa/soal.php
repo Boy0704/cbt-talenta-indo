@@ -30,7 +30,7 @@
 
 	$date = date_create($ambil_jam_mulai);
 	date_add($date, date_interval_create_from_date_string($minutes_to_add.' minutes'));
-	$jam_mulai = date_format($date, 'H:i:s');
+	$jam_mulai = date_format($date, 'Y-m-d H:i:s');
 
 	// echo $jam_mulai; exit;
 
@@ -208,7 +208,7 @@
 
 		<?php 
 		date_default_timezone_set('Asia/Jakarta');
-		$target_date = date('Y').', '.date('m').', '.date('d').', '.substr($jam_mulai, 0,2).', '.substr($jam_mulai, 3,2).', '.substr($jam_mulai, 6,2); 
+		$target_date = substr($jam_mulai, 0,4).', '.substr($jam_mulai,5,2).', '.substr($jam_mulai, 8,2).', '.substr($jam_mulai, 11,2).', '.substr($jam_mulai, 14,2).', '.substr($jam_mulai, 17,2); 
 		$target = date('Y').', '.date('m').', '.date('d').', '.date('H').', '.date('i').', '.date('s'); 
 
 
