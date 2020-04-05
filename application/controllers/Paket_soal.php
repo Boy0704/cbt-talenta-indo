@@ -80,7 +80,8 @@ class Paket_soal extends CI_Controller
 	    // 'waktu_tambah' => set_value('waktu_tambah'),
 	    // 'user_id_ubah' => set_value('user_id_ubah'),
 	    // 'waktu_ubah' => set_value('waktu_ubah'),
-	    'status_paket' => set_value('status_paket'),
+        'status_paket' => set_value('status_paket'),
+	    'tata_cara' => set_value('tata_cara'),
 	);
         $this->load->view('v_index', $data);
     }
@@ -99,7 +100,8 @@ class Paket_soal extends CI_Controller
 		// 'waktu_tambah' => $this->input->post('waktu_tambah',TRUE),
 		// 'user_id_ubah' => $this->input->post('user_id_ubah',TRUE),
 		// 'waktu_ubah' => $this->input->post('waktu_ubah',TRUE),
-		'status_paket' => $this->input->post('status_paket',TRUE),
+        'status_paket' => $this->input->post('status_paket',TRUE),
+		'tata_cara' => $this->input->post('tata_cara',TRUE),
 	    );
 
             $this->Paket_soal_model->insert($data);
@@ -125,7 +127,8 @@ class Paket_soal extends CI_Controller
 		// 'waktu_tambah' => set_value('waktu_tambah', $row->waktu_tambah),
 		// 'user_id_ubah' => set_value('user_id_ubah', $row->user_id_ubah),
 		// 'waktu_ubah' => set_value('waktu_ubah', $row->waktu_ubah),
-		'status_paket' => set_value('status_paket', $row->status_paket),
+        'status_paket' => set_value('status_paket', $row->status_paket),
+		'tata_cara' => set_value('tata_cara', $row->tata_cara),
 	    );
             $this->load->view('v_index', $data);
         } else {
@@ -148,7 +151,8 @@ class Paket_soal extends CI_Controller
 		'waktu_tambah' => $this->input->post('waktu_tambah',TRUE),
 		'user_id_ubah' => $this->input->post('user_id_ubah',TRUE),
 		'waktu_ubah' => $this->input->post('waktu_ubah',TRUE),
-		'status_paket' => $this->input->post('status_paket',TRUE),
+        'status_paket' => $this->input->post('status_paket',TRUE),
+		'tata_cara' => $this->input->post('tata_cara',TRUE),
 	    );
 
             $this->Paket_soal_model->update($this->input->post('paket_soal_id', TRUE), $data);

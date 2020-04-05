@@ -33,6 +33,10 @@
             <label for="datetime">Waktu Ubah <?php echo form_error('waktu_ubah') ?></label>
             <input type="text" class="form-control" name="waktu_ubah" id="waktu_ubah" placeholder="Waktu Ubah" value="<?php echo $waktu_ubah; ?>" />
         </div> -->
+        <div class="form-group">
+            <label for="varchar">Tata Cara Pengerjaan</label>
+            <textarea class="form-control textarea_editor" name="tata_cara"><?php echo $tata_cara ?></textarea>
+        </div>
 	    <div class="form-group">
             <label for="enum">Status Paket <?php echo form_error('status_paket') ?></label>
             <!-- <input type="text" class="form-control" name="status_paket" id="status_paket" placeholder="Status Paket" value="<?php echo $status_paket; ?>" /> -->

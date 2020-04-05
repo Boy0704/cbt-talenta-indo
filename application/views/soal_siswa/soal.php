@@ -232,7 +232,7 @@
 			$('.hours').html(obj.hours);
 			$('.minutes').html(obj.minutes);
 			$('.seconds').html(obj.seconds);
-			if (obj.seconds == 0) {
+			if (obj.hours == 0 && obj.minutes == 0 && obj.seconds == 0) {
 				console.log('waktu selesai');
 				window.location="<?php echo base_url() ?>app/aksi_mulai_ujian/<?php echo $paket_soal_id.'/'.$soal_id.'/'.$user_id.'/'.$skor_id ?>";
 			} else {
