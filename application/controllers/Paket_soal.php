@@ -81,7 +81,10 @@ class Paket_soal extends CI_Controller
 	    // 'user_id_ubah' => set_value('user_id_ubah'),
 	    // 'waktu_ubah' => set_value('waktu_ubah'),
         'status_paket' => set_value('status_paket'),
-	    'tata_cara' => set_value('tata_cara'),
+        'tata_cara' => set_value('tata_cara'),
+        'waktu_soal' => set_value('waktu_soal'),
+        'keyboard' => set_value('keyboard'),
+	    'klik_kanan' => set_value('klik_kanan'),
 	);
         $this->load->view('v_index', $data);
     }
@@ -101,7 +104,10 @@ class Paket_soal extends CI_Controller
 		// 'user_id_ubah' => $this->input->post('user_id_ubah',TRUE),
 		// 'waktu_ubah' => $this->input->post('waktu_ubah',TRUE),
         'status_paket' => $this->input->post('status_paket',TRUE),
-		'tata_cara' => $this->input->post('tata_cara',TRUE),
+        'tata_cara' => $this->input->post('tata_cara',TRUE),
+        'waktu_soal' => $this->input->post('waktu_soal',TRUE),
+        'keyboard' => $this->input->post('keyboard',TRUE),
+		'klik_kanan' => $this->input->post('klik_kanan',TRUE),
 	    );
 
             $this->Paket_soal_model->insert($data);
@@ -128,7 +134,10 @@ class Paket_soal extends CI_Controller
 		// 'user_id_ubah' => set_value('user_id_ubah', $row->user_id_ubah),
 		// 'waktu_ubah' => set_value('waktu_ubah', $row->waktu_ubah),
         'status_paket' => set_value('status_paket', $row->status_paket),
-		'tata_cara' => set_value('tata_cara', $row->tata_cara),
+        'tata_cara' => set_value('tata_cara', $row->tata_cara),
+        'waktu_soal' => set_value('waktu_soal', $row->waktu_soal),
+        'keyboard' => set_value('keyboard', $row->keyboard),
+		'klik_kanan' => set_value('klik_kanan', $row->klik_kanan),
 	    );
             $this->load->view('v_index', $data);
         } else {
@@ -152,7 +161,10 @@ class Paket_soal extends CI_Controller
 		'user_id_ubah' => $this->input->post('user_id_ubah',TRUE),
 		'waktu_ubah' => $this->input->post('waktu_ubah',TRUE),
         'status_paket' => $this->input->post('status_paket',TRUE),
-		'tata_cara' => $this->input->post('tata_cara',TRUE),
+        'tata_cara' => $this->input->post('tata_cara',TRUE),
+        'waktu_soal' => $this->input->post('waktu_soal',TRUE),
+        'keyboard' => $this->input->post('keyboard',TRUE),
+		'klik_kanan' => $this->input->post('klik_kanan',TRUE),
 	    );
 
             $this->Paket_soal_model->update($this->input->post('paket_soal_id', TRUE), $data);

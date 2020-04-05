@@ -39,7 +39,10 @@
 		<th>Waktu Tambah</th>
 		<th>User Id Ubah</th>
 		<th>Waktu Ubah</th> -->
-		<th>Status Paket</th>
+        <th>Waktu Soal</th>
+        <th>Keyboard</th>
+        <th>Klik Kanan</th>
+        <th>Status Paket</th>
 		<th>Action</th>
             </tr><?php
             foreach ($paket_soal_data as $paket_soal)
@@ -54,6 +57,9 @@
 			<td><?php echo $paket_soal->user_id_ubah ?></td>
 			<td><?php echo $paket_soal->waktu_ubah ?></td> -->
 			<td><?php echo get_soal_paket($paket_soal->paket_soal_id) ?></td>
+            <td><?php echo $paket_soal->waktu_soal ?></td>
+            <td><?php echo $paket_soal->keyboard ?></td>
+            <td><?php echo $paket_soal->klik_kanan ?></td>
 			<td><?php echo cek_status($paket_soal->status_paket) ?></td>
 			<td style="text-align:center" width="200px">
                 <a href="#" data-toggle="modal" data-target="#myModal<?php echo $paket_soal->paket_soal_id ?>"><span class="label label-primary">Tambah Soal</span></a>

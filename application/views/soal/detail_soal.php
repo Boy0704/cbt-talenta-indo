@@ -1,7 +1,21 @@
 <?php 
 $soal_id = $this->uri->segment(3);
  ?>
+
+<div class="row" id="uploadExcel" style="margin-left: 5px; display: none; ">
+    <form action="app/import_soal_ganda/<?php echo $soal_id ?>" method="POST" enctype="multipart/form-data">
+        <div class="col-md-4"><input type="file" name="uploadexcel" class="form-control"></div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary btn-sm">Kirim</button>
+        </div>
+        <div class="col-md-4">
+            <a href="upload/import_data/import_soal_ganda.xlsx" class="label label-info">Download Template Import</a>
+        </div>
+    </form>
+</div><br>
+
 <a href="app/tambah_butir_soal/<?php echo $soal_id ?>" class="btn btn-primary">Tambah Pertanyaan</a>
+<button id="upload" class="btn btn-info">Import Excel</button>
 <hr>
 <table class="table table-bordered tabel-data" style="margin-bottom: 10px">
             <thead>
@@ -34,3 +48,12 @@ $soal_id = $this->uri->segment(3);
             </tbody>
         </table>
         
+    <script type="text/javascript">
+            $(document).ready(function() {
+                // $('#uploadExcel').hide();
+
+                $('#upload').click(function(event) {
+                    $('#uploadExcel').show();
+                });;                
+            });
+        </script>

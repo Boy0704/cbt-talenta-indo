@@ -151,6 +151,8 @@
         images_upload_credentials: true
    });
 </script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script type="text/javascript"><?php echo $this->session->userdata('message') ?></script>
   
 </body>
 

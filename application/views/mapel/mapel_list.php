@@ -33,7 +33,7 @@
             <tr>
                 <th>No</th>
 		<th>Jenis Ujian</th>
-		<th>Waktu Kategori</th>
+		<!-- <th>Waktu Kategori</th> -->
 		<th>Operator</th>
 		<th>Nilai Lulus</th>
 		<th>Action</th>
@@ -44,14 +44,14 @@
                 <tr>
 			<td width="80px"><?php echo ++$start ?></td>
 			<td><?php echo $mapel->mapel ?></td>
-			<td><?php echo $mapel->mapel_kategori ?></td>
+			<!-- <td><?php echo $mapel->mapel_kategori ?></td> -->
 			<td><?php echo $mapel->operator ?></td>
 			<td><?php echo $mapel->nilai_lulus ?></td>
 			<td style="text-align:center" width="200px">
 				<?php 
 				echo anchor(site_url('mapel/update/'.$mapel->mapel_id),'<span class="label label-info">Ubah</span>'); 
-				//echo ' | '; 
-				//echo anchor(site_url('mapel/delete/'.$mapel->mapel_id),'<span class="label label-danger">Hapus</span>','onclick="javasciprt: return confirm(\'Are You Sure ?\')"'); 
+				echo ' | '; 
+				echo anchor(site_url('mapel/delete/'.$mapel->mapel_id),'<span class="label label-danger">Hapus</span>','onclick="javasciprt: return confirm(\'Are You Sure ?\')"'); 
 				?>
 			</td>
 		</tr>

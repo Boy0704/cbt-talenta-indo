@@ -16,6 +16,80 @@ class App extends CI_Controller {
 		$this->load->view('v_index', $data);
     }
 
+    public function import_soal_ganda($soal_id)
+    {
+        unlink('upload/import_data/import_soal_ganda.xlsx');
+        include APPPATH.'third_party/PHPExcel/PHPExcel.php';
+
+        // Fungsi untuk melakukan proses upload file
+        $return = array();
+        $this->load->library('upload'); // Load librari upload
+            
+        $config['upload_path'] = './upload/import_data/';
+        $config['allowed_types'] = 'xlsx';
+        $config['max_size'] = '2048';
+        $config['overwrite'] = true;
+        $config['file_name'] = 'import_soal_ganda';
+    
+        $this->upload->initialize($config); // Load konfigurasi uploadnya
+        if($this->upload->do_upload('uploadexcel')){ // Lakukan upload dan Cek jika proses upload berhasil
+            // Jika berhasil :
+            $return = array('result' => 'success', 'file' => $this->upload->data(), 'error' => '');
+            // return $return;
+        }else{
+            // Jika gagal :
+            $return = array('result' => 'failed', 'file' => '', 'error' => $this->upload->display_errors());
+            // return $return;
+        }
+        // print_r($return);exit();
+        
+        $excelreader = new PHPExcel_Reader_Excel2007();
+        $loadexcel = $excelreader->load('upload/import_data/import_soal_ganda.xlsx'); // Load file yang telah diupload ke folder excel
+        $sheet = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
+        // Buat sebuah variabel array untuk menampung array data yg akan kita insert ke database
+        $data = array();
+        
+        $numrow = 1;
+        foreach($sheet as $row){
+            // Cek $numrow apakah lebih dari 1
+            // Artinya karena baris pertama adalah nama-nama kolom
+            // Jadi dilewat saja, tidak usah diimport
+            
+            if($numrow > 1){
+                // Kita push (add) array data ke variabel data
+                
+                // $actualdate_du = date('Y-m-d',$temp_du);
+                array_push($data, array(
+                    'soal_id'=>$soal_id,
+                    'pertanyaan'=>$row['A'], // Insert data nis dari kolom A di excel
+                    'jawaban1'=>$row['B'], // Insert data nama dari kolom B di excel
+                    'jawaban2'=>$row['C'], // Insert data nama dari kolom B di excel
+                    'jawaban3'=>$row['D'], // Insert data nama dari kolom B di excel
+                    'jawaban4'=>$row['E'], // Insert data nama dari kolom B di excel
+                    'jawaban5'=>$row['F'], // Insert data nama dari kolom B di excel
+                    'jawaban6'=>$row['G'], // Insert data nama dari kolom B di excel
+                    'bobot_jawaban1'=>$row['H'], // Insert data nama dari kolom B di excel
+                    'bobot_jawaban2'=>$row['I'], // Insert data nama dari kolom B di excel
+                    'bobot_jawaban3'=>$row['J'], // Insert data nama dari kolom B di excel
+                    'bobot_jawaban4'=>$row['K'], // Insert data nama dari kolom B di excel
+                    'bobot_jawaban5'=>$row['L'], // Insert data nama dari kolom B di excel
+                    'bobot_jawaban6'=>$row['M'], // Insert data nama dari kolom B di excel
+                   
+                ));
+            }
+            
+            $numrow++; // Tambah 1 setiap kali looping
+        }
+        // echo "<pre>";
+        // print_r($data);exit;
+
+        // Panggil fungsi insert_multiple yg telah kita buat sebelumnya di model
+        $this->db->insert_batch('butir_soal', $data);
+        
+        $this->session->set_flashdata('message',alert_biasa('Import data excel berhasil','success'));
+        redirect('soal/detail_soal/'.$soal_id,'refresh');
+    }
+
     public function list_batch()
     {
     	$userid = $this->session->userdata('id_user');
@@ -69,7 +143,7 @@ class App extends CI_Controller {
     	$this->load->view('v_index', $data);
     }
 
-    public function aksi_mulai_ujian($paket_soal_id, $soal_id, $userid, $skor_id=null)
+    public function aksi_mulai_ujian($paket_soal_id, $soal_id, $userid, $skor_id=null,$sisa_waktu=null)
     {
     	date_default_timezone_set('Asia/Jakarta');
     	$waktu_mulai = date('Y-m-d H:i:s');
@@ -112,9 +186,9 @@ class App extends CI_Controller {
 			$cek_soal_id_bru = $this->db->query($sql);
 			error_reporting(0);
 			$soal_id_bru = $this->db->query($sql)->row()->soal_id;
-
 			//cek apakah soal sudah tidak ada lagi
 			if ($cek_soal_id_bru->num_rows() == 0) {
+                // log_r('bb');
 				$this->db->where('skor_id', $skor_id);
     			$this->db->update('skor', array('status'=> 1, 'waktu_selesai'=>$waktu_mulai));
 
@@ -139,9 +213,35 @@ class App extends CI_Controller {
 				<?php
 				
 			} else {
+                // log_r('aa');
 				// $this->db->insert('skor', array('user_id'=>$userid,'paket_soal_id'=>$paket_soal_id,'waktu_mulai'=>$waktu_mulai,'status'=>0));
     // 			$insert_id = $this->db->insert_id();
-				redirect('app/soal_siswa/'.$soal_id_bru.'/'.$paket_soal_id.'/'.$skor_id);
+                if ($sisa_waktu == 'habis') {
+                    $this->db->where('skor_id', $skor_id);
+                    $this->db->update('skor', array('status'=> 1, 'waktu_selesai'=>$waktu_mulai));
+
+                    //hapus akses batch ujian
+                    $get_paket_soal_id = $this->db->get_where('skor', array('skor_id'=>$skor_id))->row()->paket_soal_id;
+                    $get_batch_id = $this->db->get_where('paket_soal', array('paket_soal_id'=>$get_paket_soal_id))->row()->batch_id;
+                    $get_id_x = $this->db->query("SELECT id_x FROM akses_batch where user_id='$userid' and paket_soal_id='$get_paket_soal_id' ")->row()->id_x;
+                    // echo $skor_id.'<br>';
+                    // echo $get_paket_soal_id.'<br>';
+                    // echo $get_batch_id.'<br>';
+                    // echo $userid.'<br>';
+                    // echo $get_id_x.'<br>';
+                    // exit;
+                    $this->db->where('id_x', $get_id_x);
+                    $this->db->delete('akses_batch');
+                    ?>
+                    <script type="text/javascript">
+                        alert("Waktu Anda telah Selesai, Selamat anda telah menyelesaikan Ujian dengan baik");
+                        window.location="<?php echo base_url('app/ujian_selesai'); ?>"
+                    </script>
+                    <?php
+                } else {
+                    redirect('app/soal_siswa/'.$soal_id_bru.'/'.$paket_soal_id.'/'.$skor_id);
+                }
+				
 			}
     	}
     }
@@ -359,6 +459,18 @@ class App extends CI_Controller {
 					      <label><input type="radio" name="jwb" nilai="<?php echo $ambil->bobot_jawaban5 ?>" value="<?php echo filter_string($ambil->jawaban5) ?>" butir_soal_id="<?php echo $butir_soal_id ?>" <?php echo $select ?>><?php echo $ambil->jawaban5 ?></label>
 					    </div>
 						<?php } ?>
+                        <?php 
+                        if ($ambil->jawaban6 == '') { } else {
+                            if (select_jawaban($butir_soal_id, $user_id) == filter_string($ambil->jawaban6)) {
+                                $select = "checked";
+                            } else {
+                                $select = "";
+                            }
+                        ?>
+                        <div class="radio">
+                          <label><input type="radio" name="jwb" nilai="<?php echo $ambil->bobot_jawaban6 ?>" value="<?php echo filter_string($ambil->jawaban6) ?>" butir_soal_id="<?php echo $butir_soal_id ?>" <?php echo $select ?>><?php echo $ambil->jawaban6 ?></label>
+                        </div>
+                        <?php } ?>
 						
 					</form>
 		    	</div>
@@ -401,7 +513,7 @@ class App extends CI_Controller {
     	} else {
     		$this->db->where('butir_soal_id', $butir_soal_id);
     		$this->db->update('butir_soal', $_POST);
-    		redirect('app/ubah_butir_soal/'.$butir_soal_id,'refresh');
+    		redirect('soal/detail_soal/'.get_data('butir_soal','butir_soal_id',$butir_soal_id,'soal_id'),'refresh');
     	}
     	
 	}

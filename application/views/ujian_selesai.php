@@ -20,7 +20,8 @@
 			<td><?php echo $siswa->nama_batch ?></td>
 			<td><?php echo $siswa->paket_soal ?></td>
 			<td style="text-align:center" width="200px">
-				<a href="app/detail_paket_soal/<?php echo $siswa->paket_soal_id ?>/<?php echo $this->session->userdata('id_user'); ?>" class="btn btn-primary">Pilih</a>
+                <span class="label label-success">Selesai</span>
+				<!-- <a href="app/detail_paket_soal/<?php echo $siswa->paket_soal_id ?>/<?php echo $this->session->userdata('id_user'); ?>" class="btn btn-primary">Pilih</a> -->
 			</td>
 		</tr>
                 <?php

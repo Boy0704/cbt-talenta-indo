@@ -14,17 +14,8 @@
 
 	$mapel_id = $this->db->get_where('soal', array('soal_id'=>$soal_id))->row()->mapel_id;
 
-	$minutes_to_add = $this->db->query("SELECT pg.pengaturan FROM pengaturan as pg, mapel as mp where mp.mapel_kategori=pg.pengaturan_id and mp.mapel_id='$mapel_id' ")->row()->pengaturan;
-	//cek pengaturan id
-	$pengaturan_id = $this->db->query("SELECT pg.pengaturan_id FROM pengaturan as pg, mapel as mp where mp.mapel_kategori=pg.pengaturan_id and mp.mapel_id='$mapel_id' ")->row()->pengaturan_id;
-	//cek apakah soal bukan SKD, maka update waktu mulai, setelah satu soal selesai
-	if ($pengaturan_id == 'waktu_tbi' || $pengaturan_id == 'waktu_tba') {
-		//update waktu mulai
-		date_default_timezone_set('Asia/Jakarta');
-    	$jam_skrg = date('Y-m-d H:i:s');
-		$this->db->where('skor_id', $skor_id);
-    	$this->db->update('skor', array('waktu_mulai'=>$jam_skrg));
-	}
+	$minutes_to_add = $this->db->query("SELECT waktu_soal FROM paket_soal where paket_soal_id='$paket_soal_id' ")->row()->waktu_soal;
+	
 
 	$ambil_jam_mulai = $this->db->get_where('skor', array('skor_id'=>$skor_id))->row()->waktu_mulai;
 
@@ -71,28 +62,8 @@
 		  <div class="panel-heading">Navigasi Soal</div>
 		  <div class="panel-body">
 		  	<?php 
-		  	if ($pengaturan_id == 'waktu_skd') {
-		  		$sql = "
-				SELECT
-					item_soal.soal_id 
-				FROM
-					item_soal,skor
-				WHERE 
-						item_soal.paket_soal_id=skor.paket_soal_id
-						and
-					 skor.paket_soal_id = '$paket_soal_id'
-					 AND
-					 skor.user_id='$user_id'
-				";
-				$skd_data = $this->db->query($sql);
-				foreach ($skd_data->result() as $btn_skd) {
-					
-		  	 ?>
-		  	 <a href="app/soal_siswa/<?php echo $btn_skd->soal_id.'/'.$paket_soal_id.'/'.$skor_id ?>" class="<?php if ($btn_skd->soal_id == $soal_id) { echo 'btn btn-warning'; } else { echo 'btn btn-info'; } ?>" style="width: 90px; margin-right: 5px; margin-bottom: 5px;"><?php echo get_nama_soal($btn_skd->soal_id) ?></a>
-
-		  	<?php } echo'<br><br><br>'; } ?>
 		  	
-		  	<?php 
+		  	
 			$no = 1;
 			foreach ($banyak_soal as $row) {
 
@@ -234,7 +205,7 @@
 			$('.seconds').html(obj.seconds);
 			if (obj.hours == 0 && obj.minutes == 0 && obj.seconds == 0) {
 				console.log('waktu selesai');
-				window.location="<?php echo base_url() ?>app/aksi_mulai_ujian/<?php echo $paket_soal_id.'/'.$soal_id.'/'.$user_id.'/'.$skor_id ?>";
+				window.location="<?php echo base_url() ?>app/aksi_mulai_ujian/<?php echo $paket_soal_id.'/'.$soal_id.'/'.$user_id.'/'.$skor_id ?>/habis";
 			} else {
 				console.log('waktu belum selesai');
 			}

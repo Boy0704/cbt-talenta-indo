@@ -162,7 +162,7 @@ class Mapel extends CI_Controller
     public function _rules() 
     {
 	$this->form_validation->set_rules('mapel', 'mapel', 'trim|required');
-	$this->form_validation->set_rules('mapel_kategori', 'mapel kategori', 'trim|required');
+	// $this->form_validation->set_rules('mapel_kategori', 'mapel kategori', 'trim|required');
 	$this->form_validation->set_rules('operator', 'operator', 'trim|required');
 	$this->form_validation->set_rules('nilai_lulus', 'nilai lulus', 'trim|required');
 

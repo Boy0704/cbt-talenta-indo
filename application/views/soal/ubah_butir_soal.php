@@ -21,7 +21,7 @@
 		</div>
 		<div class="col-md-3">
 			<h4>Bobot Jawaban 1</h4>
-			<input type="number" class="form-control" name="bobot_jawaban1" value="<?php echo $data->bobot_jawaban1 ?>">
+			<input type="text" class="form-control" name="bobot_jawaban1" value="<?php echo $data->bobot_jawaban1 ?>">
 		</div>
 	</div>
 </div>
@@ -34,7 +34,7 @@
 		</div>
 		<div class="col-md-3">
 			<h4>Bobot Jawaban 2</h4>
-			<input type="number" class="form-control" name="bobot_jawaban2" value="<?php echo $data->bobot_jawaban2 ?>">
+			<input type="text" class="form-control" name="bobot_jawaban2" value="<?php echo $data->bobot_jawaban2 ?>">
 		</div>
 	</div>
 </div>
@@ -47,7 +47,7 @@
 		</div>
 		<div class="col-md-3">
 			<h4>Bobot Jawaban 3</h4>
-			<input type="number" class="form-control" name="bobot_jawaban3" value="<?php echo $data->bobot_jawaban3 ?>">
+			<input type="text" class="form-control" name="bobot_jawaban3" value="<?php echo $data->bobot_jawaban3 ?>">
 		</div>
 	</div>
 </div>
@@ -60,7 +60,7 @@
 		</div>
 		<div class="col-md-3">
 			<h4>Bobot Jawaban 4</h4>
-			<input type="number" class="form-control" name="bobot_jawaban4" value="<?php echo $data->bobot_jawaban4 ?>">
+			<input type="text" class="form-control" name="bobot_jawaban4" value="<?php echo $data->bobot_jawaban4 ?>">
 		</div>
 	</div>
 </div>
@@ -73,7 +73,7 @@
 		</div>
 		<div class="col-md-3">
 			<h4>Bobot Jawaban 5</h4>
-			<input type="number" class="form-control" name="bobot_jawaban5" value="<?php echo $data->bobot_jawaban5 ?>">
+			<input type="text" class="form-control" name="bobot_jawaban5" value="<?php echo $data->bobot_jawaban5 ?>">
 		</div>
 	</div>
 </div>
@@ -86,7 +86,7 @@
 		</div>
 		<div class="col-md-3">
 			<h4>Bobot Jawaban 6</h4>
-			<input type="number" class="form-control" name="bobot_jawaban6" value="<?php echo $data->bobot_jawaban5 ?>">
+			<input type="text" class="form-control" name="bobot_jawaban6" value="<?php echo $data->bobot_jawaban5 ?>">
 		</div>
 	</div>
 </div>

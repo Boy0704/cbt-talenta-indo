@@ -37,6 +37,28 @@
             <label for="varchar">Tata Cara Pengerjaan</label>
             <textarea class="form-control textarea_editor" name="tata_cara"><?php echo $tata_cara ?></textarea>
         </div>
+        <div class="form-group">
+            <label for="varchar">Waktu Soal</label>
+            <input type="text" class="form-control" name="waktu_soal" id="waktu_soal" placeholder="Waktu Soal" value="<?php echo $waktu_soal; ?>" />
+        </div>
+        <div class="form-group">
+            <label for="varchar">Keyboard</label>
+            <select name="keyboard" class="form-control">
+                <option value="<?php echo $keyboard ?>"><?php echo $keyboard ?></option>
+                <option value="tidak">tidak</option>
+                <option value="aktif">aktif</option>
+                
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="varchar">Klik Kanan</label>
+            <select name="klik_kanan" class="form-control">
+                <option value="<?php echo $klik_kanan ?>"><?php echo $klik_kanan ?></option>
+                <option value="tidak">tidak</option>
+                <option value="aktif">aktif</option>
+                
+            </select>
+        </div>
 	    <div class="form-group">
             <label for="enum">Status Paket <?php echo form_error('status_paket') ?></label>
             <!-- <input type="text" class="form-control" name="status_paket" id="status_paket" placeholder="Status Paket" value="<?php echo $status_paket; ?>" /> -->
