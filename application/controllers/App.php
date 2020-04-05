@@ -16,6 +16,24 @@ class App extends CI_Controller {
 		$this->load->view('v_index', $data);
     }
 
+    public function export_skor_ujian($paket_soal_id)
+    {
+        $data = array(
+            'paket_soal_id' => $paket_soal_id,
+            'paket_soal' => get_data('paket_soal','paket_soal_id',$paket_soal_id,'paket_soal')
+        );
+        $this->load->view('skor_excel', $data);
+    }
+
+    public function skor_ujian()
+    {
+        $data = array(
+            'konten' => 'skor_ujian',
+            'judul_page' => 'Skor Ujian',
+        );
+        $this->load->view('v_index', $data);
+    }
+
     public function import_soal_ganda($soal_id)
     {
         unlink('upload/import_data/import_soal_ganda.xlsx');
@@ -109,7 +127,7 @@ class App extends CI_Controller {
     	$data = array(
     		'userid' => $userid,
     		// 'query' => $this->db->get_where('akses_batch', array('batch_id'=>base64_decode($batch_id))),
-    		'query' => $this->db->query("SELECT * FROM akses_batch, paket_soal where akses_batch.paket_soal_id=paket_soal.paket_soal_id and akses_batch.batch_id='$batchid' and akses_batch.user_id='$userid' "),
+    		'query' => $this->db->query("SELECT * FROM akses_batch, paket_soal where akses_batch.paket_soal_id=paket_soal.paket_soal_id and akses_batch.batch_id='$batchid' and akses_batch.user_id='$userid' AND paket_soal.status_paket = 1 "),
     		'judul_page' => 'Paket Soal',
             'konten' => 'soal_siswa/paket_soal',
     	);
@@ -141,6 +159,29 @@ class App extends CI_Controller {
             'konten' => 'soal_siswa/mulai_ujian',
     	);
     	$this->load->view('v_index', $data);
+    }
+
+    public function user_ujian()
+    {
+        $data = array(
+            'judul_page' => 'List Ujian Aktif',
+            'konten' => 'ujian_aktif',
+        );
+        $this->load->view('v_index', $data);
+    }
+
+    public function hentikan_ujian($user_id,$paket_soal_id)
+    {
+        $this->db->where('user_id', $user_id);
+        $this->db->where('paket_soal_id', $paket_soal_id);
+        $this->db->update('skor', array('status'=>1));
+        $this->session->set_flashdata('message',alert_biasa('Ujian Berhasil di hentikan','success'));
+        redirect('app/user_ujian/','refresh');
+    }
+
+    public function cek_status_selesai($skor_id)
+    {
+        echo get_data('skor','skor_id',$skor_id,'status');
     }
 
     public function aksi_mulai_ujian($paket_soal_id, $soal_id, $userid, $skor_id=null,$sisa_waktu=null)
@@ -334,7 +375,7 @@ class App extends CI_Controller {
     		$cekbatch = $this->db->get_where('akses_batch',array('user_id'=>$userid,'batch_id'=>$batch_id));
     		if ($cekbatch->num_rows() == 0) {
     			//select paket
-    			$paket = $this->db->get_where('paket_soal', array('batch_id'=>$batch_id));
+    			$paket = $this->db->get_where('paket_soal', array('batch_id'=>$batch_id,'status_paket'=>1));
     			foreach ($paket->result() as $value) {
     				// echo $value->paket_soal_id;
     				$this->db->insert('akses_batch', array('user_id'=>$userid,'batch_id'=>$batch_id,'paket_soal_id'=>$value->paket_soal_id));

@@ -40,9 +40,15 @@
               </a>
           </li>
           <li>
-            <a href="#">
+            <a href="app/user_ujian">
+              <i class="fa fa-list"></i>
+              <span>List Ujian Aktif</span>
+              </a>
+          </li>
+          <li>
+            <a href="app/skor_ujian">
               <i class="fa fa-star-half-o"></i>
-              <span>Skor / Rangking</span>
+              <span>Skor Ujian</span>
               </a>
           </li>
           <li>
@@ -71,6 +77,110 @@
               </a>
           </li>
 
+          <?php 
+          } elseif ($this->session->userdata('level') == 'manager') {
+           ?>
+          <li class="mt">
+            <a href="">
+              <i class="fa fa-dashboard"></i>
+              <span>Dashboard</span>
+              </a>
+          </li>
+          
+          
+          <li>
+            <a href="mapel">
+              <i class="fa fa-paste"></i>
+              <span>Jenis Ujian Tes</span>
+              </a>
+          </li>
+          <li>
+            <a href="batch">
+              <i class="fa fa-paperclip"></i>
+              <span>Batch Soal</span>
+              </a>
+          </li>
+          <li>
+            <a href="paket_soal">
+              <i class="fa fa-paperclip"></i>
+              <span>Paket Soal</span>
+              </a>
+          </li>
+          <li>
+            <a href="soal">
+              <i class="fa fa-list-alt"></i>
+              <span>Daftar Semua Soal</span>
+              </a>
+          </li>
+          <li>
+            <a href="app/user_ujian">
+              <i class="fa fa-list"></i>
+              <span>List Ujian Aktif</span>
+              </a>
+          </li>
+          <li>
+            <a href="app/skor_ujian">
+              <i class="fa fa-star-half-o"></i>
+              <span>Skor Ujian</span>
+              </a>
+          </li>
+          <li>
+            <a href="app/update_profil">
+              <i class="fa fa-key"></i>
+              <span>Ubah Password</span>
+              </a>
+          </li>
+          <li>
+            <a href="Pengaturan">
+              <i class="fa fa-suitcase"></i>
+              <span>Pengaturan</span>
+              </a>
+          </li>
+          <li>
+            <a href="app/reset_siswa">
+              <i class="fa fa-suitcase"></i>
+              <span>Reset Siswa</span>
+              </a>
+          </li>
+
+          <?php
+          } elseif ($this->session->userdata('level') == 'pengawas') {
+           ?>
+
+           <li class="mt">
+            <a href="">
+              <i class="fa fa-dashboard"></i>
+              <span>Dashboard</span>
+              </a>
+          </li>
+          
+          
+          <li>
+            <a href="batch">
+              <i class="fa fa-paperclip"></i>
+              <span>Batch Soal</span>
+              </a>
+          </li>
+          
+          <li>
+            <a href="app/user_ujian">
+              <i class="fa fa-list"></i>
+              <span>List Ujian Aktif</span>
+              </a>
+          </li>
+          <li>
+            <a href="app/skor_ujian">
+              <i class="fa fa-star-half-o"></i>
+              <span>Skor Ujian</span>
+              </a>
+          </li>
+          <li>
+            <a href="app/update_profil">
+              <i class="fa fa-key"></i>
+              <span>Ubah Password</span>
+              </a>
+          </li>
+          
             <?php
           } elseif ($this->session->userdata('level') == 'siswa') {
            ?>
@@ -98,11 +208,13 @@
               </a>
           </li>
           <li>
-            <a >
+            -->
+            <li>
+            <a>
               <i class="fa fa-paperclip"></i>
               <span>Ujian Selesai</span>
               </a>
-          </li> -->
+          </li>
           <li>
             <a>
               <i class="fa fa-suitcase"></i>
@@ -130,12 +242,14 @@
               <span>Skor / Rangking</span>
               </a>
           </li>
-          <li>
-            <a href="app/ujian_selesai">
+          
+             -->
+             <li>
+             <a href="app/ujian_selesai">
               <i class="fa fa-paperclip"></i>
               <span>Ujian Selesai</span>
               </a>
-          </li> -->
+          </li>
           <li>
             <a href="app/update_profil">
               <i class="fa fa-suitcase"></i>

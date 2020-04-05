@@ -15,9 +15,13 @@
 	$mapel_id = $this->db->get_where('soal', array('soal_id'=>$soal_id))->row()->mapel_id;
 
 	$minutes_to_add = $this->db->query("SELECT waktu_soal FROM paket_soal where paket_soal_id='$paket_soal_id' ")->row()->waktu_soal;
+
+	$keyboard = get_data('paket_soal','paket_soal_id',$paket_soal_id,'keyboard');
+	$klik_kanan = get_data('paket_soal','paket_soal_id',$paket_soal_id,'klik_kanan');
 	
 
 	$ambil_jam_mulai = $this->db->get_where('skor', array('skor_id'=>$skor_id))->row()->waktu_mulai;
+	
 
 	$date = date_create($ambil_jam_mulai);
 	date_add($date, date_interval_create_from_date_string($minutes_to_add.' minutes'));
@@ -76,10 +80,31 @@
 </div>
 
 <script type="text/javascript">
-	//disable klik kanan
-	document.addEventListener("contextmenu", function(e){
-	    e.preventDefault();
-	}, false);
+	
+	<?php 
+	if ($klik_kanan == 'tidak') {
+		?>
+		//disable klik kanan
+		document.addEventListener("contextmenu", function(e){
+		    e.preventDefault();
+		}, false);
+		<?php
+	}
+	 ?>
+
+	 <?php 
+	if ($keyboard == 'tidak') {
+		?>
+		//disable keyboard
+		document.onkeydown = function (e) {
+	        return false;
+		}
+		<?php
+	}
+	 ?>
+
+	
+
 	$(document).ready(function() {
 
 		//load soal pertama
@@ -188,6 +213,8 @@
 		var target_date = new Date(<?php echo $target_date ?>);
 	    var current_date = new Date(<?php echo $target ?>);
 
+	    var status_selesai = '';
+
 		//Create the countdown object
 		var count = new Countdown(target_date, current_date);
 
@@ -203,10 +230,19 @@
 			$('.hours').html(obj.hours);
 			$('.minutes').html(obj.minutes);
 			$('.seconds').html(obj.seconds);
+
+			//cek status waktu selesai
+			$.get('app/cek_status_selesai/<?php echo $skor_id ?>', function(data) {
+				status_selesai = data;
+			});
+
 			if (obj.hours == 0 && obj.minutes == 0 && obj.seconds == 0) {
 				console.log('waktu selesai');
 				window.location="<?php echo base_url() ?>app/aksi_mulai_ujian/<?php echo $paket_soal_id.'/'.$soal_id.'/'.$user_id.'/'.$skor_id ?>/habis";
-			} else {
+			} else if (status_selesai == 1) {
+				console.log('waktu selesai');
+				window.location="<?php echo base_url() ?>app/aksi_mulai_ujian/<?php echo $paket_soal_id.'/'.$soal_id.'/'.$user_id.'/'.$skor_id ?>/habis";
+			}else {
 				console.log('waktu belum selesai');
 			}
 			//This version will display all numbers with two digits
