@@ -295,7 +295,7 @@ class App extends CI_Controller {
 
     	$userid = $this->session->userdata('id_user');
     	$this->db->order_by('butir_soal_id', 'RANDOM');
-    	$this->db->select('butir_soal_id');
+    	$this->db->select('butir_soal_id, status_soal, status_jawaban');
     	$data = array(
     		'userid' => $userid,
     		'nama_soal' => $nama_soal,
@@ -335,6 +335,35 @@ class App extends CI_Controller {
 	    	);
 	    	$this->db->insert('skor_detail', $data);
     	} 
+    }
+
+    public function simpan_jawaban_essay($user_id, $skor_id, $soal_id, $butir_soal_id, $bobot='0')
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $jawaban = $this->input->post('jawaban');
+        $cekjawaban = $this->db->get_where('skor_detail', array('user_id'=>$user_id,'soal_id'=>$soal_id,'butir_soal_id'=>$butir_soal_id));
+        if ($cekjawaban->num_rows() == 1) {
+            $data = array(
+                'nilai' => $bobot,
+                'jawaban' => $jawaban,
+                'waktu' => date("Y-m-d H:i:s", mktime(date("H")+1, date("i"), date("s"), date("m"), date("d"), date("Y")))
+            );
+            $this->db->where('user_id', $user_id);
+            $this->db->where('soal_id', $soal_id);
+            $this->db->where('butir_soal_id', $butir_soal_id);
+            $this->db->update('skor_detail', $data);
+        } elseif ($cekjawaban->num_rows() == 0) {
+            $data = array(
+                'user_id' => $user_id,
+                'skor_id' => $skor_id,
+                'soal_id' => $soal_id,
+                'butir_soal_id' => $butir_soal_id,
+                'nilai' => $bobot,
+                'jawaban' => $jawaban,
+                'waktu' => date('Y-m-d H:i:s')
+            );
+            $this->db->insert('skor_detail', $data);
+        } 
     }
 
     public function rangking_siswa()
@@ -429,101 +458,215 @@ class App extends CI_Controller {
     	$select = "";
     	$user_id = $this->session->userdata('id_user');
     	$ambil = $this->db->get_where('butir_soal', array('butir_soal_id'=>$butir_soal_id))->row();
+
+        //cek soal type soal
+        if ($ambil->status_soal == 'essay') {
+            ?>
+
+            <div style="font-size: 12pt; font-family: Arial">
+                <div  style="float: left; margin-right: 5px;">
+                    <b><?php echo $no_soal ?>. </b>
+                </div>
+                <div>
+                    <div>
+                        <?php echo $ambil->pertanyaan ?>
+                    </div><br>
+                    <div>
+                        <h4>Jawaban Soal Essay</h4>
+                        <textarea class="form-control textarea_editor" name="jawaban" id="jawaban_essay<?php echo $butir_soal_id ?>"><?php echo select_jawaban($butir_soal_id, $user_id) ?></textarea>
+                    </div>
+                    <div style="text-align: right;">
+                        <a class="btn btn-primary" id="simpan_jawaban<?php echo $butir_soal_id ?>" butir_soal_id="<?php echo $butir_soal_id ?>"> Simpan Jawaban</a>
+                    </div>
+                </div>
+                <ul class="pager">
+                    <!-- <li class="previous"><a style="cursor: pointer;" id="pager">Sebelumnya</a></li> -->
+                    <!-- <li><label><input type="checkbox" id="ragu" value="">Ragu-ragu</label></li> -->
+                    <!-- <li class="next"><a style="cursor: pointer;" id="">Selanjutnya</a></li> -->
+                </ul>
+            </div>
+
+            <?php
+        } else {
+        
     	?>
-    	<div style="font-size: 12pt; font-family: Arial">
-    		<div  style="float: left; margin-right: 5px;">
-    			<b><?php echo $no_soal ?>. </b>
-    		</div>
-    		<div>
-    			<div>
-		    		<?php echo $ambil->pertanyaan ?>
-		    	</div><br>
-		    	<div>
-		    		<form>
-		    			<?php 
-		    			if ($ambil->jawaban1 == '') { } else {
-		    				if (select_jawaban($butir_soal_id, $user_id) == filter_string($ambil->jawaban1)) {
-		    					$select = "checked";
-		    				} else {
-		    					$select = "";
-		    				}
-		    			?>
-		    			<div class="radio">
-					      <label><input type="radio" name="jwb" nilai="<?php echo $ambil->bobot_jawaban1 ?>" value="<?php echo filter_string($ambil->jawaban1) ?>" butir_soal_id="<?php echo $butir_soal_id ?>" <?php echo $select ?>><?php echo $ambil->jawaban1 ?></label>
-					    </div>
-						<?php } ?>
-						<?php 
-		    			if ($ambil->jawaban2 == '') { } else {
-		    				if (select_jawaban($butir_soal_id, $user_id) == filter_string($ambil->jawaban2)) {
-		    					$select = "checked";
-		    				} else {
-		    					$select = "";
-		    				}
-		    			?>
-		    			<div class="radio">
-					      <label><input type="radio" name="jwb" nilai="<?php echo $ambil->bobot_jawaban2 ?>" value="<?php echo filter_string($ambil->jawaban2) ?>" butir_soal_id="<?php echo $butir_soal_id ?>" <?php echo $select ?>><?php echo $ambil->jawaban2 ?></label>
-					    </div>
-						<?php } ?>
-						<?php 
-		    			if ($ambil->jawaban3 == '') { } else {
-		    				if (select_jawaban($butir_soal_id, $user_id) == filter_string($ambil->jawaban3)) {
-		    					$select = "checked";
-		    				} else {
-		    					$select = "";
-		    				}
-		    			?>
-		    			<div class="radio">
-					      <label><input type="radio" name="jwb" nilai="<?php echo $ambil->bobot_jawaban3 ?>" value="<?php echo filter_string($ambil->jawaban3) ?>" butir_soal_id="<?php echo $butir_soal_id ?>" <?php echo $select ?>><?php echo $ambil->jawaban3 ?></label>
-					    </div>
-						<?php } ?>
-						<?php 
-		    			if ($ambil->jawaban4 == '') { } else {
-		    				if (select_jawaban($butir_soal_id, $user_id) == filter_string($ambil->jawaban4)) {
-		    					$select = "checked";
-		    				} else {
-		    					$select = "";
-		    				}
-		    			?>
-		    			<div class="radio">
-					      <label><input type="radio" name="jwb" nilai="<?php echo $ambil->bobot_jawaban4 ?>" value="<?php echo filter_string($ambil->jawaban4) ?>" butir_soal_id="<?php echo $butir_soal_id ?>" <?php echo $select ?>><?php echo $ambil->jawaban4 ?></label>
-					    </div>
-						<?php } ?>
-						<?php 
-		    			if ($ambil->jawaban5 == '') { } else {
-		    				if (select_jawaban($butir_soal_id, $user_id) == filter_string($ambil->jawaban5)) {
-		    					$select = "checked";
-		    				} else {
-		    					$select = "";
-		    				}
-		    			?>
-		    			<div class="radio">
-					      <label><input type="radio" name="jwb" nilai="<?php echo $ambil->bobot_jawaban5 ?>" value="<?php echo filter_string($ambil->jawaban5) ?>" butir_soal_id="<?php echo $butir_soal_id ?>" <?php echo $select ?>><?php echo $ambil->jawaban5 ?></label>
-					    </div>
-						<?php } ?>
-                        <?php 
-                        if ($ambil->jawaban6 == '') { } else {
-                            if (select_jawaban($butir_soal_id, $user_id) == filter_string($ambil->jawaban6)) {
-                                $select = "checked";
-                            } else {
-                                $select = "";
-                            }
-                        ?>
-                        <div class="radio">
-                          <label><input type="radio" name="jwb" nilai="<?php echo $ambil->bobot_jawaban6 ?>" value="<?php echo filter_string($ambil->jawaban6) ?>" butir_soal_id="<?php echo $butir_soal_id ?>" <?php echo $select ?>><?php echo $ambil->jawaban6 ?></label>
-                        </div>
+        	<div style="font-size: 12pt; font-family: Arial">
+        		<div  style="float: left; margin-right: 5px;">
+        			<b><?php echo $no_soal ?>. </b>
+        		</div>
+        		<div>
+        			<div>
+    		    		<?php echo $ambil->pertanyaan ?>
+    		    	</div><br>
+    		    	<div>
+                        <!-- //cek soal type jawaban -->
+                        <?php if ($ambil->status_jawaban == '2') { ?>
+                            <form>
+                                <?php 
+                                if ($ambil->jawaban1 == '') { } else {
+                                    if (select_jawaban($butir_soal_id, $user_id) == filter_string($ambil->jawaban1)) {
+                                        $select = "checked";
+                                    } else {
+                                        $select = "";
+                                    }
+                                ?>
+                                <div class="checkbox">
+                                  <label><input type="checkbox" name="jwb" nilai="<?php echo $ambil->bobot_jawaban1 ?>" value="<?php echo filter_string($ambil->jawaban1) ?>" butir_soal_id="<?php echo $butir_soal_id ?>" <?php echo $select ?>><?php echo $ambil->jawaban1 ?></label>
+                                </div>
+                                <?php } ?>
+                                <?php 
+                                if ($ambil->jawaban2 == '') { } else {
+                                    if (select_jawaban($butir_soal_id, $user_id) == filter_string($ambil->jawaban2)) {
+                                        $select = "checked";
+                                    } else {
+                                        $select = "";
+                                    }
+                                ?>
+                                <div class="checkbox">
+                                  <label><input type="checkbox" name="jwb" nilai="<?php echo $ambil->bobot_jawaban2 ?>" value="<?php echo filter_string($ambil->jawaban2) ?>" butir_soal_id="<?php echo $butir_soal_id ?>" <?php echo $select ?>><?php echo $ambil->jawaban2 ?></label>
+                                </div>
+                                <?php } ?>
+                                <?php 
+                                if ($ambil->jawaban3 == '') { } else {
+                                    if (select_jawaban($butir_soal_id, $user_id) == filter_string($ambil->jawaban3)) {
+                                        $select = "checked";
+                                    } else {
+                                        $select = "";
+                                    }
+                                ?>
+                                <div class="checkbox">
+                                  <label><input type="checkbox" name="jwb" nilai="<?php echo $ambil->bobot_jawaban3 ?>" value="<?php echo filter_string($ambil->jawaban3) ?>" butir_soal_id="<?php echo $butir_soal_id ?>" <?php echo $select ?>><?php echo $ambil->jawaban3 ?></label>
+                                </div>
+                                <?php } ?>
+                                <?php 
+                                if ($ambil->jawaban4 == '') { } else {
+                                    if (select_jawaban($butir_soal_id, $user_id) == filter_string($ambil->jawaban4)) {
+                                        $select = "checked";
+                                    } else {
+                                        $select = "";
+                                    }
+                                ?>
+                                <div class="checkbox">
+                                  <label><input type="checkbox" name="jwb" nilai="<?php echo $ambil->bobot_jawaban4 ?>" value="<?php echo filter_string($ambil->jawaban4) ?>" butir_soal_id="<?php echo $butir_soal_id ?>" <?php echo $select ?>><?php echo $ambil->jawaban4 ?></label>
+                                </div>
+                                <?php } ?>
+                                <?php 
+                                if ($ambil->jawaban5 == '') { } else {
+                                    if (select_jawaban($butir_soal_id, $user_id) == filter_string($ambil->jawaban5)) {
+                                        $select = "checked";
+                                    } else {
+                                        $select = "";
+                                    }
+                                ?>
+                                <div class="checkbox">
+                                  <label><input type="checkbox" name="jwb" nilai="<?php echo $ambil->bobot_jawaban5 ?>" value="<?php echo filter_string($ambil->jawaban5) ?>" butir_soal_id="<?php echo $butir_soal_id ?>" <?php echo $select ?>><?php echo $ambil->jawaban5 ?></label>
+                                </div>
+                                <?php } ?>
+                                <?php 
+                                if ($ambil->jawaban6 == '') { } else {
+                                    if (select_jawaban($butir_soal_id, $user_id) == filter_string($ambil->jawaban6)) {
+                                        $select = "checked";
+                                    } else {
+                                        $select = "";
+                                    }
+                                ?>
+                                <div class="checkbox">
+                                  <label><input type="checkbox" name="jwb" nilai="<?php echo $ambil->bobot_jawaban6 ?>" value="<?php echo filter_string($ambil->jawaban6) ?>" butir_soal_id="<?php echo $butir_soal_id ?>" <?php echo $select ?>><?php echo $ambil->jawaban6 ?></label>
+                                </div>
+                                <?php } ?>
+                                
+                            </form>
+
+                        <?php } else { ?>
+        		    		<form>
+        		    			<?php 
+        		    			if ($ambil->jawaban1 == '') { } else {
+        		    				if (select_jawaban($butir_soal_id, $user_id) == filter_string($ambil->jawaban1)) {
+        		    					$select = "checked";
+        		    				} else {
+        		    					$select = "";
+        		    				}
+        		    			?>
+        		    			<div class="radio">
+        					      <label><input type="radio" name="jwb" nilai="<?php echo $ambil->bobot_jawaban1 ?>" value="<?php echo filter_string($ambil->jawaban1) ?>" butir_soal_id="<?php echo $butir_soal_id ?>" <?php echo $select ?>><?php echo $ambil->jawaban1 ?></label>
+        					    </div>
+        						<?php } ?>
+        						<?php 
+        		    			if ($ambil->jawaban2 == '') { } else {
+        		    				if (select_jawaban($butir_soal_id, $user_id) == filter_string($ambil->jawaban2)) {
+        		    					$select = "checked";
+        		    				} else {
+        		    					$select = "";
+        		    				}
+        		    			?>
+        		    			<div class="radio">
+        					      <label><input type="radio" name="jwb" nilai="<?php echo $ambil->bobot_jawaban2 ?>" value="<?php echo filter_string($ambil->jawaban2) ?>" butir_soal_id="<?php echo $butir_soal_id ?>" <?php echo $select ?>><?php echo $ambil->jawaban2 ?></label>
+        					    </div>
+        						<?php } ?>
+        						<?php 
+        		    			if ($ambil->jawaban3 == '') { } else {
+        		    				if (select_jawaban($butir_soal_id, $user_id) == filter_string($ambil->jawaban3)) {
+        		    					$select = "checked";
+        		    				} else {
+        		    					$select = "";
+        		    				}
+        		    			?>
+        		    			<div class="radio">
+        					      <label><input type="radio" name="jwb" nilai="<?php echo $ambil->bobot_jawaban3 ?>" value="<?php echo filter_string($ambil->jawaban3) ?>" butir_soal_id="<?php echo $butir_soal_id ?>" <?php echo $select ?>><?php echo $ambil->jawaban3 ?></label>
+        					    </div>
+        						<?php } ?>
+        						<?php 
+        		    			if ($ambil->jawaban4 == '') { } else {
+        		    				if (select_jawaban($butir_soal_id, $user_id) == filter_string($ambil->jawaban4)) {
+        		    					$select = "checked";
+        		    				} else {
+        		    					$select = "";
+        		    				}
+        		    			?>
+        		    			<div class="radio">
+        					      <label><input type="radio" name="jwb" nilai="<?php echo $ambil->bobot_jawaban4 ?>" value="<?php echo filter_string($ambil->jawaban4) ?>" butir_soal_id="<?php echo $butir_soal_id ?>" <?php echo $select ?>><?php echo $ambil->jawaban4 ?></label>
+        					    </div>
+        						<?php } ?>
+        						<?php 
+        		    			if ($ambil->jawaban5 == '') { } else {
+        		    				if (select_jawaban($butir_soal_id, $user_id) == filter_string($ambil->jawaban5)) {
+        		    					$select = "checked";
+        		    				} else {
+        		    					$select = "";
+        		    				}
+        		    			?>
+        		    			<div class="radio">
+        					      <label><input type="radio" name="jwb" nilai="<?php echo $ambil->bobot_jawaban5 ?>" value="<?php echo filter_string($ambil->jawaban5) ?>" butir_soal_id="<?php echo $butir_soal_id ?>" <?php echo $select ?>><?php echo $ambil->jawaban5 ?></label>
+        					    </div>
+        						<?php } ?>
+                                <?php 
+                                if ($ambil->jawaban6 == '') { } else {
+                                    if (select_jawaban($butir_soal_id, $user_id) == filter_string($ambil->jawaban6)) {
+                                        $select = "checked";
+                                    } else {
+                                        $select = "";
+                                    }
+                                ?>
+                                <div class="radio">
+                                  <label><input type="radio" name="jwb" nilai="<?php echo $ambil->bobot_jawaban6 ?>" value="<?php echo filter_string($ambil->jawaban6) ?>" butir_soal_id="<?php echo $butir_soal_id ?>" <?php echo $select ?>><?php echo $ambil->jawaban6 ?></label>
+                                </div>
+                                <?php } ?>
+        						
+        					</form>
+
                         <?php } ?>
-						
-					</form>
-		    	</div>
-    		</div>
-    		<ul class="pager">
-			    <!-- <li class="previous"><a style="cursor: pointer;" id="pager">Sebelumnya</a></li> -->
-			    <!-- <li><label><input type="checkbox" id="ragu" value="">Ragu-ragu</label></li> -->
-			    <!-- <li class="next"><a style="cursor: pointer;" id="">Selanjutnya</a></li> -->
-			</ul>
-    	</div>
+    		    	</div>
+        		</div>
+        		<ul class="pager">
+    			    <!-- <li class="previous"><a style="cursor: pointer;" id="pager">Sebelumnya</a></li> -->
+    			    <!-- <li><label><input type="checkbox" id="ragu" value="">Ragu-ragu</label></li> -->
+    			    <!-- <li class="next"><a style="cursor: pointer;" id="">Selanjutnya</a></li> -->
+    			</ul>
+        	</div>
     	
     	<?php
+        //tutup if soal type soal
+        }
     }
 
     public function tambah_butir_soal($soal_id)

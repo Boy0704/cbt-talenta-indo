@@ -46,7 +46,7 @@
             <select name="keyboard" class="form-control">
                 <option value="<?php echo $keyboard ?>"><?php echo $keyboard ?></option>
                 <option value="tidak">tidak</option>
-                <option value="aktif">aktif</option>
+                <option value="ya">aktif</option>
                 
             </select>
         </div>
@@ -55,7 +55,7 @@
             <select name="klik_kanan" class="form-control">
                 <option value="<?php echo $klik_kanan ?>"><?php echo $klik_kanan ?></option>
                 <option value="tidak">tidak</option>
-                <option value="aktif">aktif</option>
+                <option value="ya">aktif</option>
                 
             </select>
         </div>

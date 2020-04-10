@@ -119,22 +119,113 @@
 			// $('.next > a').css('color', 'red');
 
 			//ragu-ragu
-			$('input:checkbox').change(
-		    function(){
-		        if ($(this).prop('checked', true)) {
-		            console.log('checked');
-		            $('#btn_soal<?php echo $first->butir_soal_id ?>').attr('class', 'btn btn-warning');
-		        }
-		    });
+			// $('input:checkbox').change(
+		 //    function(){
+		 //        if ($(this).prop('checked', true)) {
+		 //            console.log('checked');
+		 //            $('#btn_soal<?php echo $first->butir_soal_id ?>').attr('class', 'btn btn-warning');
+		 //        }
+		 //    });
 
 			//ketika klik jawaban	
+			<?php 
+			if ($first->status_soal == 'essay') {
+				?>
+				$('#simpan_jawaban<?php echo $first->butir_soal_id ?>').click(function() {
+					//cek bobot jawaban
+					// var bobot = $(this).attr('nilai');
+					var butir_soal_id = $(this).attr('butir_soal_id');
+					var jawaban = $('#jawaban_essay<?php echo $first->butir_soal_id ?>').val();
+					// alert(jawaban);
+					var soal_id = '<?php echo $soal_id ?>';
+					var skor_id = '<?php echo $skor_id ?>';
+					var user_id = '<?php echo $user_id ?>';
+					$.ajax({
+						url: 'app/simpan_jawaban_essay/'+user_id+'/'+skor_id+'/'+soal_id+'/'+butir_soal_id,
+						type: 'POST',
+						dataType: 'html',
+						data: {jawaban: jawaban},
+					})
+					.done(function() {
+						console.log("success simpan bobot");
+						alert("Jawaban Anda berhasil disimpan !");
+						$('#btn_soal'+butir_soal_id).attr('class', 'btn btn-success');
+					})
+					.fail(function() {
+						console.log("error simpan bobot");
+					})
+					.always(function() {
+						console.log("complete simpan bobot");
+					});
+
+				});
+
+
+
+				<?php
+			} else {
+			 ?>
 			klik_jawaban();
+			<?php } ?>
 		});
 		
 		<?php
 		$no = 1;
 		foreach ($banyak_soal as $row) {
+			//cek status soal
+			if ($row->status_soal == 'essay') {
 		 ?>
+
+		 $('#btn_soal<?php echo $row->butir_soal_id ?>, #pager<?php echo $row->butir_soal_id ?>').click(function() {
+			// alert('Klik ID'+ <?php echo $row->butir_soal_id ?>);
+
+			$.ajax({
+				url: 'app/ambil_soal_ujian/<?php echo $row->butir_soal_id ?>/<?php echo $no; ?>',
+				type: 'GET'
+			})
+			.done(function(respon) {
+				console.log("success");
+				$('#soal').html(respon);
+
+				//ketika klik jawaban	
+				$('#simpan_jawaban<?php echo $row->butir_soal_id ?>').click(function() {
+					//cek bobot jawaban
+					// var bobot = $(this).attr('nilai');
+					var butir_soal_id = $(this).attr('butir_soal_id');
+					var jawaban = $('#jawaban_essay<?php echo $row->butir_soal_id ?>').val();
+					var soal_id = '<?php echo $soal_id ?>';
+					var skor_id = '<?php echo $skor_id ?>';
+					var user_id = '<?php echo $user_id ?>';
+					$.ajax({
+						url: 'app/simpan_jawaban_essay/'+user_id+'/'+skor_id+'/'+soal_id+'/'+butir_soal_id,
+						type: 'POST',
+						dataType: 'html',
+						data: {jawaban: jawaban},
+					})
+					.done(function() {
+						console.log("success simpan bobot");
+						alert("Jawaban Anda berhasil disimpan !");
+						$('#btn_soal'+butir_soal_id).attr('class', 'btn btn-success');
+					})
+					.fail(function() {
+						console.log("error simpan bobot");
+					})
+					.always(function() {
+						console.log("complete simpan bobot");
+					});
+
+				});
+			})
+			.fail(function() {
+				console.log("error");
+			})
+			.always(function() {
+				console.log("complete");
+			});
+			
+		});
+
+		<?php }else { ?>
 		$('#btn_soal<?php echo $row->butir_soal_id ?>, #pager<?php echo $row->butir_soal_id ?>').click(function() {
 			// alert('Klik ID'+ <?php echo $row->butir_soal_id ?>);
 
@@ -166,6 +257,8 @@
 			});
 			
 		});
+
+		<?php } // tutup if ?>
 
 		<?php $no++; } ?>
 
