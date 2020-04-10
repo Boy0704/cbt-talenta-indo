@@ -19,6 +19,7 @@ header("Content-Disposition: attachment; filename=$paket_soal.xls");
 	$no = 0;
 	foreach ($this->db->get_where('skor', array('paket_soal_id'=>$paket_soal_id))->result() as $rw) {
 	 ?>
+	 <tr>
 	<td><?php echo ++$no; ?></td>
 	<td><?php echo get_data('user','user_id',$rw->user_id,'nama_lengkap') ?></td>
 	<?php 
@@ -28,5 +29,7 @@ header("Content-Disposition: attachment; filename=$paket_soal.xls");
 		<?php
 	}
 	 ?>
+	</tr>
 	<?php } ?>
+
 </table>
