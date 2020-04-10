@@ -20,6 +20,18 @@ class Welcome extends CI_Controller {
 	 */
 	public function index()
 	{
-		$this->load->view('welcome_message');
+		// $this->load->view('welcome_message');
+		if (preg_match('/jawaban1/', 'jawaban1,jawaban2')) {
+			echo 'ya';
+		} else {
+			echo 'tidak';
+		}
+
+		if (preg_match('/jawaban2/', 'jawaban1,jawaban2')) {
+			echo 'ya';
+		} else {
+			echo 'tidak';
+		}
+
 	}
 }
