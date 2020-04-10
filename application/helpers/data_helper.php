@@ -158,6 +158,23 @@ function select_jawaban($butir_soal_id, $user_id)
 	
 }
 
+function select_jawaban_multi($butir_soal_id, $user_id, $value)
+{
+	$CI 	=& get_instance();
+	$jawaban =$CI->db->get_where('skor_detail', array('butir_soal_id'=>$butir_soal_id,'user_id'=>$user_id));
+	if ($jawaban->num_rows() == 0) {
+		return 'tidak';
+	} else {
+		$j = $jawaban->row();
+		if (preg_match("/".$value."/", $j->jawaban)) {
+			return 'ya';
+		} else {
+			return 'tidak';
+		}
+	}
+	
+}
+
 function cek_btn_soal($butir_soal_id, $user_id)
 {
 	$CI 	=& get_instance();

@@ -165,8 +165,26 @@
 				<?php
 			} else {
 			 ?>
-			klik_jawaban();
-			<?php } ?>
+			 //cek jawaban multi
+			 <?php if ($first->status_jawaban == '2') { ?>
+			 	$('input:checkbox').click(function(event) {
+			 		var numberOfChecked = $('input:checkbox:checked').length;
+			 		if (numberOfChecked == 2) {
+			 			$('input:checkbox:not(":checked")').attr('disabled', 'disabled');
+			 		} else {
+			 			$('input:checkbox:not(":checked")').removeAttr("disabled")
+			 		}
+			 	});
+			 	
+			 	klik_jawaban_multi();
+
+
+			 <?php } else { ?>
+				klik_jawaban();
+
+			<?php 
+				}
+			} ?>
 		});
 		
 		<?php
@@ -238,16 +256,33 @@
 				$('#soal').html(respon);
 
 				//ragu-ragu
-				$('input:checkbox').change(
-			    function(){
-			        if ($(this).prop('checked', true)) {
-			            console.log('checked');
-			            $('#btn_soal<?php echo $row->butir_soal_id ?>').attr('class', 'btn btn-warning');
-			        }
-			    });
+				// $('input:checkbox').change(
+			 //    function(){
+			 //        if ($(this).prop('checked', true)) {
+			 //            console.log('checked');
+			 //            $('#btn_soal<?php echo $row->butir_soal_id ?>').attr('class', 'btn btn-warning');
+			 //        }
+			 //    });
 				
-				//ketika klik jawaban	
-				klik_jawaban();
+				
+			 	<?php if ($row->status_jawaban == '2') { ?>
+			 	$('input:checkbox').click(function(event) {
+			 		var numberOfChecked = $('input:checkbox:checked').length;
+			 		if (numberOfChecked == 2) {
+			 			$('input:checkbox:not(":checked")').attr('disabled', 'disabled');
+			 		} else {
+			 			$('input:checkbox:not(":checked")').removeAttr("disabled")
+			 		}
+			 	});
+			 	
+			 	klik_jawaban_multi();
+
+
+				 <?php } else { ?>
+					klik_jawaban();
+				<?php } ?>
+
+
 			})
 			.fail(function() {
 				console.log("error");
@@ -292,6 +327,48 @@
 
 			});
 		}
+
+		function klik_jawaban_multi(butir_soal_id) {
+			$('#simpan_jawaban').click(function() {
+				//cek bobot jawaban
+				// alert('Multi Jawaban');
+				var bobot = $(this).attr('nilai');
+				var butir_soal_id = $(this).attr('butir_soal_id');
+				var jawaban = [];
+				$('input[name=jwb]').each(function(){
+	                if($(this).is(":checked"))
+	                {
+	                     jawaban.push($(this).val());
+	                }
+	           	});
+	           	jawaban = jawaban.toString();
+	           	
+				var soal_id = '<?php echo $soal_id ?>';
+				var skor_id = '<?php echo $skor_id ?>';
+				var user_id = '<?php echo $user_id ?>';
+				console.log(bobot+' - '+jawaban+' - '+butir_soal_id+' - '+soal_id+' - '+user_id);
+				console.log('mulai bobot jawaban');
+				$.ajax({
+					url: 'app/simpan_jawaban/'+user_id+'/'+skor_id+'/'+soal_id+'/'+butir_soal_id+'/'+bobot,
+					type: 'POST',
+					dataType: 'html',
+					data: {jawaban: jawaban},
+				})
+				.done(function() {
+					console.log("success simpan bobot");
+					$('#btn_soal'+butir_soal_id).attr('class', 'btn btn-success');
+				})
+				.fail(function() {
+					console.log("error simpan bobot");
+				})
+				.always(function() {
+					console.log("complete simpan bobot");
+				});
+
+			});
+		}
+
+
 
 	});
 
