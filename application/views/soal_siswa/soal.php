@@ -332,13 +332,14 @@
 			$('#simpan_jawaban').click(function() {
 				//cek bobot jawaban
 				// alert('Multi Jawaban');
-				var bobot = $(this).attr('nilai');
+				var bobot = 0;
 				var butir_soal_id = $(this).attr('butir_soal_id');
 				var jawaban = [];
 				$('input[name=jwb]').each(function(){
 	                if($(this).is(":checked"))
 	                {
 	                     jawaban.push($(this).val());
+	                     bobot += Number($(this).attr('nilai'));
 	                }
 	           	});
 	           	jawaban = jawaban.toString();

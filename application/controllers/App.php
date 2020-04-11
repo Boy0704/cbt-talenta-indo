@@ -18,7 +18,9 @@ class App extends CI_Controller {
 
     public function export_skor_ujian($paket_soal_id)
     {
+        $status_soal = get_data('butir_soal','soal_id',get_data('item_soal','paket_soal_id',$paket_soal_id,'soal_id'),'status_soal');
         $data = array(
+            'status_soal'=>$status_soal,
             'paket_soal_id' => $paket_soal_id,
             'paket_soal' => get_data('paket_soal','paket_soal_id',$paket_soal_id,'paket_soal')
         );
@@ -501,7 +503,7 @@ class App extends CI_Controller {
     		    	<div>
                         <!-- //cek soal type jawaban -->
                         <?php if ($ambil->status_jawaban == '2') { ?>
-                            <form>
+                            
                                 <?php 
                                 if ($ambil->jawaban1 == '') { } else {
                                     if (select_jawaban_multi($butir_soal_id, $user_id, 'jawaban1') == 'ya') {
@@ -577,7 +579,7 @@ class App extends CI_Controller {
                                 <div style="text-align: right;">
                                     <a class="btn btn-primary" id="simpan_jawaban" butir_soal_id="<?php echo $butir_soal_id ?>"> Simpan Jawaban</a>
                                 </div>
-                            </form>
+                            
 
                         <?php } else { ?>
         		    		<form>
