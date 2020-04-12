@@ -1,3 +1,4 @@
+<a href="app/aksi_reset_all" onclick="javasciprt: return confirm('Are You Sure ?')" class="btn btn-danger">RESET ALL USER</a><br><br>
 <table class="table table-bordered tabel-data" style="margin-bottom: 10px">
             <thead>
             <tr>
@@ -18,13 +19,13 @@
 			<td width="80px"><?php echo ++$start ?></td>
 			<td><?php echo $siswa->nama_lengkap ?></td>
 			<td style="text-align:center" width="200px">
-				<a href="app/aksi_reset/<?php echo $siswa->user_id ?>" class="btn btn-danger btn-xs">RESET ALL</a>
+				<a href="app/aksi_reset/<?php echo $siswa->user_id ?>" class="btn btn-danger btn-xs" onclick="javasciprt: return confirm('Are You Sure ?')">RESET ALL</a>
 
                 <?php 
                 foreach ($this->db->get('batch')->result() as $dt) {
                  ?>
 
-                <a href="app/aksi_reset_batch/<?php echo $dt->batch_id ?>/<?php echo $siswa->user_id ?>" class="btn btn-danger btn-xs"><?php echo $dt->nama_batch ?> </a>
+                <a href="app/aksi_reset_batch/<?php echo $dt->batch_id ?>/<?php echo $siswa->user_id ?>" class="btn btn-danger btn-xs" onclick="javasciprt: return confirm('Are You Sure ?')"><?php echo $dt->nama_batch ?> </a>
 
             <?php } ?>
 			</td>

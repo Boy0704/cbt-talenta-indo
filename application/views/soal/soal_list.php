@@ -33,7 +33,8 @@
             <tr>
                 <th>No</th>
 		<th>Mapel</th>
-		<th>Soal</th>
+        <th>Soal</th>
+		<th>Type Soal</th>
 		<th>Action</th>
             </tr><?php
             foreach ($soal_data as $soal)
@@ -42,10 +43,11 @@
                 <tr>
 			<td width="80px"><?php echo ++$start ?></td>
 			<td><?php echo mapel($soal->mapel_id) ?></td>
-			<td><?php echo $soal->soal ?></td>
+            <td><?php echo $soal->soal ?></td>
+			<td><?php echo $soal->status_soal ?></td>
 			<td style="text-align:center" width="200px">
 				<?php 
-				echo anchor(site_url('soal/detail_soal/'.$soal->soal_id),'<span class="label label-info">Detail Soal</span>'); 
+				echo anchor(site_url('soal/detail_soal/'.$soal->soal_id.'/'.$soal->status_soal),'<span class="label label-info">Detail Soal</span>'); 
                 echo ' | '; 
                 echo anchor(site_url('soal/update/'.$soal->soal_id),'<span class="label label-info">Ubah</span>'); 
 				echo ' | '; 

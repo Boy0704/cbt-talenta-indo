@@ -1,20 +1,21 @@
 <?php 
 $soal_id = $this->uri->segment(3);
+$status_soal = $this->uri->segment(4);
  ?>
 
 <div class="row" id="uploadExcel" style="margin-left: 5px; display: none; ">
-    <form action="app/import_soal_ganda/<?php echo $soal_id ?>" method="POST" enctype="multipart/form-data">
+    <form action="app/import_soal/<?php echo $soal_id.'/'.$status_soal ?>" method="POST" enctype="multipart/form-data">
         <div class="col-md-4"><input type="file" name="uploadexcel" class="form-control"></div>
         <div class="col-md-2">
             <button type="submit" class="btn btn-primary btn-sm">Kirim</button>
         </div>
         <div class="col-md-4">
-            <a href="upload/import_data/import_soal_ganda.xlsx" class="label label-info">Download Template Import</a>
+            <a href="upload/import_data/template/import_soal.xlsx" class="label label-info">Download Template Import</a>
         </div>
     </form>
 </div><br>
 
-<a href="app/tambah_butir_soal/<?php echo $soal_id ?>" class="btn btn-primary">Tambah Pertanyaan</a>
+<a href="app/tambah_butir_soal/<?php echo $soal_id.'/'.$status_soal ?>" class="btn btn-primary">Tambah Pertanyaan</a>
 <button id="upload" class="btn btn-info">Import Excel</button>
 <hr>
 <table class="table table-bordered tabel-data" style="margin-bottom: 10px">
@@ -38,8 +39,8 @@ $soal_id = $this->uri->segment(3);
 			<td><?php echo $soal->pertanyaan ?></td>
 			
 			<td style="text-align:center" width="200px">
-				<a href="app/ubah_butir_soal/<?php echo $soal->butir_soal_id ?>" class="btn btn-info">Ubah</a>
-                | <a href="app/hapus_butir_soal/<?php echo $soal->butir_soal_id.'/'.$soal_id ?>" class="btn btn-danger" onclick="javasciprt: return confirm('Are You Sure ?')">Hapus</a>
+				<a href="app/ubah_butir_soal/<?php echo $soal->butir_soal_id.'/'.$status_soal ?>" class="btn btn-info">Ubah</a>
+                | <a href="app/hapus_butir_soal/<?php echo $soal->butir_soal_id.'/'.$soal_id.'/'.$status_soal ?>" class="btn btn-danger" onclick="javasciprt: return confirm('Are You Sure ?')">Hapus</a>
             </td>
 		</tr>
                 <?php

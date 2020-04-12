@@ -36,9 +36,9 @@ class App extends CI_Controller {
         $this->load->view('v_index', $data);
     }
 
-    public function import_soal_ganda($soal_id)
+    public function import_soal($soal_id, $n_status_soal)
     {
-        unlink('upload/import_data/import_soal_ganda.xlsx');
+        unlink('upload/import_data/import_soal.xlsx');
         include APPPATH.'third_party/PHPExcel/PHPExcel.php';
 
         // Fungsi untuk melakukan proses upload file
@@ -49,7 +49,7 @@ class App extends CI_Controller {
         $config['allowed_types'] = 'xlsx';
         $config['max_size'] = '2048';
         $config['overwrite'] = true;
-        $config['file_name'] = 'import_soal_ganda';
+        $config['file_name'] = 'import_soal';
     
         $this->upload->initialize($config); // Load konfigurasi uploadnya
         if($this->upload->do_upload('uploadexcel')){ // Lakukan upload dan Cek jika proses upload berhasil
@@ -64,10 +64,23 @@ class App extends CI_Controller {
         // print_r($return);exit();
         
         $excelreader = new PHPExcel_Reader_Excel2007();
-        $loadexcel = $excelreader->load('upload/import_data/import_soal_ganda.xlsx'); // Load file yang telah diupload ke folder excel
+        $loadexcel = $excelreader->load('upload/import_data/import_soal.xlsx'); // Load file yang telah diupload ke folder excel
         $sheet = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
         // Buat sebuah variabel array untuk menampung array data yg akan kita insert ke database
         $data = array();
+
+        //set status soal
+        $status_soal = '';
+        $status_jawaban = '';
+        if ($n_status_soal == 'ganda') {
+            $status_soal = 'ganda';
+            $status_jawaban = '2';
+        } elseif ($n_status_soal == 'biasa') {
+            $status_soal = 'ganda';
+            $status_jawaban = '1';
+        } else {
+            $status_soal = 'essay';
+        }
         
         $numrow = 1;
         foreach($sheet as $row){
@@ -94,6 +107,8 @@ class App extends CI_Controller {
                     'bobot_jawaban4'=>$row['K'], // Insert data nama dari kolom B di excel
                     'bobot_jawaban5'=>$row['L'], // Insert data nama dari kolom B di excel
                     'bobot_jawaban6'=>$row['M'], // Insert data nama dari kolom B di excel
+                    'status_soal'=>$status_soal,
+                    'status_jawaban'=>$status_jawaban
                    
                 ));
             }
@@ -107,7 +122,7 @@ class App extends CI_Controller {
         $this->db->insert_batch('butir_soal', $data);
         
         $this->session->set_flashdata('message',alert_biasa('Import data excel berhasil','success'));
-        redirect('soal/detail_soal/'.$soal_id,'refresh');
+        redirect('soal/detail_soal/'.$soal_id.'/'.$status_soal,'refresh');
     }
 
     public function list_batch()
@@ -722,7 +737,7 @@ class App extends CI_Controller {
         }
     }
 
-    public function tambah_butir_soal($soal_id)
+    public function tambah_butir_soal($soal_id,$status_soal)
     {
     	if ($_POST == NULL) {
     		$data = array(
@@ -735,11 +750,11 @@ class App extends CI_Controller {
     		$_POST['soal_id'] = $soal_id;
     		// print_r($_POST); exit;
     		$this->db->insert('butir_soal', $_POST);
-    		redirect('soal/detail_soal/'.$soal_id,'refresh');
+    		redirect('soal/detail_soal/'.$soal_id.'/'.$status_soal,'refresh');
     	}
     }
 
-    public function ubah_butir_soal($butir_soal_id)
+    public function ubah_butir_soal($butir_soal_id,$status_soal)
     {
     	if ($_POST == NULL) {
     		$data = array(
@@ -750,16 +765,16 @@ class App extends CI_Controller {
     	} else {
     		$this->db->where('butir_soal_id', $butir_soal_id);
     		$this->db->update('butir_soal', $_POST);
-    		redirect('soal/detail_soal/'.get_data('butir_soal','butir_soal_id',$butir_soal_id,'soal_id'),'refresh');
+    		redirect('soal/detail_soal/'.get_data('butir_soal','butir_soal_id',$butir_soal_id,'soal_id').'/'.$status_soal,'refresh');
     	}
     	
 	}
 	
-	public function hapus_butir_soal($butir_soal_id,$soal_id)
+	public function hapus_butir_soal($butir_soal_id,$soal_id,$status_soal)
     {
 		$this->db->where('butir_soal_id',$butir_soal_id);
 		$this->db->delete('butir_soal');
-		redirect('soal/detail_soal/'.$soal_id,'refresh');
+		redirect('soal/detail_soal/'.$soal_id.'/'.$status_soal,'refresh');
     	
     }
 
@@ -919,6 +934,24 @@ and skor_detail.butir_soal_id=butir_soal.butir_soal_id and skor.user_id='$user_i
     	);
     	$this->load->view('v_index', $data);
 	}
+
+    public function aksi_reset_all()
+    {
+        foreach ($this->db->get('user')->result() as $rw) {
+            $this->db->where('user_id', $rw->user_id);
+            $this->db->delete('skor');
+            $this->db->where('user_id', $rw->user_id);
+            $this->db->delete('skor_detail');
+            $this->db->where('user_id', $rw->user_id);
+            $this->db->delete('akses_batch');
+        }
+        ?>
+        <script type="text/javascript">
+            alert("RESET UJIAN SISWA BERHASIL .!");
+            window.location="<?php echo base_url() ?>app/reset_siswa";
+        </script>
+        <?php
+    }
 
 	public function aksi_reset($user_id)
 	{
