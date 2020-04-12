@@ -3,7 +3,9 @@
         <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
       </div>
       <!--logo start-->
-      <a href="" class="logo"><?php echo get_data('pengaturan','pengaturan_id','nama_aplikasi','pengaturan') ?></a>
+      <a href="" class="logo">
+        <img src="<?php echo base_url('image/'.get_data('pengaturan','pengaturan_id','logo','pengaturan')) ?>" alt="Logo" style="width: 30px; border-radius: 30%">
+        <?php echo get_data('pengaturan','pengaturan_id','nama_aplikasi','pengaturan') ?></a>
       <!--logo end-->
       <div class="nav notify-row" id="top_menu">
         <!--  notification start -->

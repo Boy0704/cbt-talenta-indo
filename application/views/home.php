@@ -42,7 +42,7 @@
             <!--custom chart end-->
             <div class="row">
               <div class="alert alert-info">
-                <h2>Selamat Datang kembali, <?php echo $this->session->userdata('nama'); ?></h2>
+                <h2>Selamat Datang, <?php echo $this->session->userdata('nama'); ?></h2>
               </div>
             </div>
             

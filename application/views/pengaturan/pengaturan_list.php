@@ -1,7 +1,7 @@
 
         <div class="row" style="margin-bottom: 10px">
             <div class="col-md-4">
-                <?php echo anchor(site_url('pengaturan/create'),'Create', 'class="btn btn-primary"'); ?>
+                <?php //echo anchor(site_url('pengaturan/create'),'Create', 'class="btn btn-primary"'); ?>
             </div>
             <div class="col-md-4 text-center">
                 <div style="margin-top: 8px" id="message">
@@ -46,8 +46,8 @@
 			<td style="text-align:center" width="200px">
 				<?php 
 				echo anchor(site_url('pengaturan/update/'.$pengaturan->pengaturan_id),'<span class="label label-info">Ubah</span>'); 
-				echo ' | '; 
-				echo anchor(site_url('pengaturan/delete/'.$pengaturan->pengaturan_id),'<span class="label label-danger">Hapus</span>','onclick="javasciprt: return confirm(\'Are You Sure ?\')"'); 
+				// echo ' | '; 
+				// echo anchor(site_url('pengaturan/delete/'.$pengaturan->pengaturan_id),'<span class="label label-danger">Hapus</span>','onclick="javasciprt: return confirm(\'Are You Sure ?\')"'); 
 				?>
 			</td>
 		</tr>
