@@ -79,7 +79,8 @@ class Soal extends CI_Controller
             'action' => site_url('soal/create_action'),
 	    'soal_id' => set_value('soal_id'),
 	    'mapel_id' => set_value('mapel_id'),
-	    'soal' => set_value('soal'),
+        'soal' => set_value('soal'),
+	    'status_soal' => set_value('status_soal'),
 	);
         $this->load->view('v_index', $data);
     }
@@ -93,7 +94,8 @@ class Soal extends CI_Controller
         } else {
             $data = array(
 		'mapel_id' => $this->input->post('mapel_id',TRUE),
-		'soal' => $this->input->post('soal',TRUE),
+        'soal' => $this->input->post('soal',TRUE),
+		'status_soal' => $this->input->post('status_soal',TRUE),
 	    );
 
             $this->Soal_model->insert($data);
@@ -114,7 +116,8 @@ class Soal extends CI_Controller
                 'action' => site_url('soal/update_action'),
 		'soal_id' => set_value('soal_id', $row->soal_id),
 		'mapel_id' => set_value('mapel_id', $row->mapel_id),
-		'soal' => set_value('soal', $row->soal),
+        'soal' => set_value('soal', $row->soal),
+		'status_soal' => set_value('status_soal', $row->status_soal),
 	    );
             $this->load->view('v_index', $data);
         } else {
@@ -132,7 +135,8 @@ class Soal extends CI_Controller
         } else {
             $data = array(
 		'mapel_id' => $this->input->post('mapel_id',TRUE),
-		'soal' => $this->input->post('soal',TRUE),
+        'soal' => $this->input->post('soal',TRUE),
+		'status_soal' => $this->input->post('status_soal',TRUE),
 	    );
 
             $this->Soal_model->update($this->input->post('soal_id', TRUE), $data);

@@ -18,7 +18,7 @@
         </div>
         <div class="form-group">
             <label for="varchar">Type Soal</label>
-            <select name="status_soal" class="form-control">
+            <select name="status_soal" class="form-control" required="">
                 <option value="<?php echo $status_soal ?>"><?php echo $status_soal ?></option>
                 <option value="essay">essay</option>
                 <option value="ganda">ganda (Pilih 2 Jawaban)</option>
