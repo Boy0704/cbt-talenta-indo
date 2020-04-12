@@ -42,6 +42,8 @@
         <th>Waktu Soal</th>
         <th>Keyboard</th>
         <th>Klik Kanan</th>
+        <th>Soal Acak</th>
+        <th>Jawaban Acak</th>
         <th>Status Paket</th>
 		<th>Action</th>
             </tr><?php
@@ -60,6 +62,8 @@
             <td><?php echo $paket_soal->waktu_soal ?></td>
             <td><?php echo $paket_soal->keyboard ?></td>
             <td><?php echo $paket_soal->klik_kanan ?></td>
+            <td><?php echo $paket_soal->random_soal ?></td>
+            <td><?php echo $paket_soal->random_jawaban ?></td>
 			<td><?php echo cek_status($paket_soal->status_paket) ?></td>
 			<td style="text-align:center" width="200px">
                 <a href="#" data-toggle="modal" data-target="#myModal<?php echo $paket_soal->paket_soal_id ?>"><span class="label label-primary">Tambah Soal</span></a>

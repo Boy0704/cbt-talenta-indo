@@ -46,7 +46,7 @@
             <select name="keyboard" class="form-control">
                 <option value="<?php echo $keyboard ?>"><?php echo $keyboard ?></option>
                 <option value="tidak">tidak</option>
-                <option value="ya">aktif</option>
+                <option value="ya">ya</option>
                 
             </select>
         </div>
@@ -55,7 +55,25 @@
             <select name="klik_kanan" class="form-control">
                 <option value="<?php echo $klik_kanan ?>"><?php echo $klik_kanan ?></option>
                 <option value="tidak">tidak</option>
-                <option value="ya">aktif</option>
+                <option value="ya">ya</option>
+                
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="varchar">Soal Acak</label>
+            <select name="random_soal" class="form-control">
+                <option value="<?php echo $random_soal ?>"><?php echo $random_soal ?></option>
+                <option value="ya">ya</option>
+                <option value="tidak">tidak</option>
+                
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="varchar">Jawaban Acak</label>
+            <select name="random_jawaban" class="form-control">
+                <option value="<?php echo $random_jawaban ?>"><?php echo $random_jawaban ?></option>
+                <option value="tidak">tidak</option>
+                <option value="ya">ya</option>
                 
             </select>
         </div>

@@ -10,15 +10,16 @@
             <tbody>
             <?php
             $start = 0;
-            $sql = "SELECT ps.paket_soal, ps.paket_soal_id, bt.nama_batch FROM paket_soal as ps, batch as bt where ps.batch_id=bt.batch_id and ps.status_paket=1 ";
+            $user_id = $this->session->userdata('id_user');
+            $sql = "SELECT * FROM skor where user_id=$user_id and status=1 ";
             $siswa_data= $this->db->query($sql)->result();
             foreach ($siswa_data as $siswa)
             {
                 ?>
                 <tr>
 			<td width="80px"><?php echo ++$start ?></td>
-			<td><?php echo $siswa->nama_batch ?></td>
-			<td><?php echo $siswa->paket_soal ?></td>
+			<td><?php echo get_data('batch','batch_id',get_data('paket_soal','paket_soal_id',$siswa->paket_soal_id,'batch_id'),'nama_batch') ?></td>
+			<td><?php echo get_data('paket_soal','paket_soal_id',$siswa->paket_soal_id,'paket_soal') ?></td>
 			<td style="text-align:center" width="200px">
                 <span class="label label-success">Selesai</span>
 				<!-- <a href="app/detail_paket_soal/<?php echo $siswa->paket_soal_id ?>/<?php echo $this->session->userdata('id_user'); ?>" class="btn btn-primary">Pilih</a> -->

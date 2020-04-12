@@ -84,7 +84,9 @@ class Paket_soal extends CI_Controller
         'tata_cara' => set_value('tata_cara'),
         'waktu_soal' => set_value('waktu_soal'),
         'keyboard' => set_value('keyboard'),
-	    'klik_kanan' => set_value('klik_kanan'),
+        'klik_kanan' => set_value('klik_kanan'),
+        'random_soal' => set_value('random_soal'),
+	    'random_jawaban' => set_value('random_jawaban'),
 	);
         $this->load->view('v_index', $data);
     }
@@ -107,7 +109,9 @@ class Paket_soal extends CI_Controller
         'tata_cara' => $this->input->post('tata_cara',TRUE),
         'waktu_soal' => $this->input->post('waktu_soal',TRUE),
         'keyboard' => $this->input->post('keyboard',TRUE),
-		'klik_kanan' => $this->input->post('klik_kanan',TRUE),
+        'klik_kanan' => $this->input->post('klik_kanan',TRUE),
+        'random_soal' => $this->input->post('random_soal',TRUE),
+		'random_jawaban' => $this->input->post('random_jawaban',TRUE),
 	    );
 
             $this->Paket_soal_model->insert($data);
@@ -137,7 +141,9 @@ class Paket_soal extends CI_Controller
         'tata_cara' => set_value('tata_cara', $row->tata_cara),
         'waktu_soal' => set_value('waktu_soal', $row->waktu_soal),
         'keyboard' => set_value('keyboard', $row->keyboard),
-		'klik_kanan' => set_value('klik_kanan', $row->klik_kanan),
+        'klik_kanan' => set_value('klik_kanan', $row->klik_kanan),
+        'random_soal' => set_value('random_soal', $row->random_soal),
+		'random_jawaban' => set_value('random_jawaban', $row->random_jawaban),
 	    );
             $this->load->view('v_index', $data);
         } else {
@@ -164,7 +170,9 @@ class Paket_soal extends CI_Controller
         'tata_cara' => $this->input->post('tata_cara',TRUE),
         'waktu_soal' => $this->input->post('waktu_soal',TRUE),
         'keyboard' => $this->input->post('keyboard',TRUE),
-		'klik_kanan' => $this->input->post('klik_kanan',TRUE),
+        'klik_kanan' => $this->input->post('klik_kanan',TRUE),
+        'random_soal' => $this->input->post('random_soal',TRUE),
+		'random_jawaban' => $this->input->post('random_jawaban',TRUE),
 	    );
 
             $this->Paket_soal_model->update($this->input->post('paket_soal_id', TRUE), $data);

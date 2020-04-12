@@ -296,7 +296,10 @@ class App extends CI_Controller {
 
 
     	$userid = $this->session->userdata('id_user');
-    	$this->db->order_by('butir_soal_id', 'RANDOM');
+        $random_soal = get_data('paket_soal','paket_soal_id',$this->uri->segment(4),'random_soal');
+        if ($random_soal == 'ya') {
+            $this->db->order_by('butir_soal_id', 'RANDOM');
+        }
     	$this->db->select('butir_soal_id, status_soal, status_jawaban');
     	$data = array(
     		'userid' => $userid,
@@ -455,8 +458,9 @@ class App extends CI_Controller {
     	redirect('app/akses_batch/'.$batch_id.'#'.$user_id,'refresh');
     }
 
-    public function ambil_soal_ujian($butir_soal_id, $no_soal)
+    public function ambil_soal_ujian($butir_soal_id, $no_soal,$random_jwb='tidak')
     {
+        $a = array();
     	$select = "";
     	$user_id = $this->session->userdata('id_user');
     	$ambil = $this->db->get_where('butir_soal', array('butir_soal_id'=>$butir_soal_id))->row();
@@ -505,77 +509,122 @@ class App extends CI_Controller {
                         <?php if ($ambil->status_jawaban == '2') { ?>
                             
                                 <?php 
-                                if ($ambil->jawaban1 == '') { } else {
+                                if ($ambil->jawaban1 == '' ) { 
+                                    $konten = '<div style="display:none;"></div>';
+                                    array_push($a,$konten);
+                                 } else {
                                     if (select_jawaban_multi($butir_soal_id, $user_id, 'jawaban1') == 'ya') {
                                         $select = "checked";
                                     } else {
                                         $select = "";
                                     }
+
+                                    $konten = '<div class="checkbox">
+                                      <label><input type="checkbox" name="jwb" nilai="'.$ambil->bobot_jawaban1.'" value="jawaban1" butir_soal_id="'.$butir_soal_id.'" '.$select.'>'.$ambil->jawaban1.'</label>
+                                    </div>';
+                                    array_push($a, $konten);
+                                }
                                 ?>
-                                <div class="checkbox">
-                                  <label><input type="checkbox" name="jwb" nilai="<?php echo $ambil->bobot_jawaban1 ?>" value="jawaban1" butir_soal_id="<?php echo $butir_soal_id ?>" <?php echo $select ?>><?php echo $ambil->jawaban1 ?></label>
-                                </div>
-                                <?php } ?>
+
                                 <?php 
-                                if ($ambil->jawaban2 == '') { } else {
+                                if ($ambil->jawaban2 == '') { 
+                                    $konten = '<div style="display:none;"></div>';
+                                    array_push($a,$konten);
+                                 } else {
                                     if (select_jawaban_multi($butir_soal_id, $user_id,'jawaban2') == 'ya') {
                                         $select = "checked";
                                     } else {
                                         $select = "";
                                     }
+                                    $konten = '<div class="checkbox">
+                                  <label><input type="checkbox" name="jwb" nilai="'.$ambil->bobot_jawaban2 .'" value="jawaban2" butir_soal_id="'.$butir_soal_id .'" '.$select .'>'.$ambil->jawaban2 .'</label>
+                                </div>';
+                                    array_push($a, $konten);
+                                }
                                 ?>
-                                <div class="checkbox">
-                                  <label><input type="checkbox" name="jwb" nilai="<?php echo $ambil->bobot_jawaban2 ?>" value="jawaban2" butir_soal_id="<?php echo $butir_soal_id ?>" <?php echo $select ?>><?php echo $ambil->jawaban2 ?></label>
-                                </div>
-                                <?php } ?>
+                                
                                 <?php 
-                                if ($ambil->jawaban3 == '') { } else {
+                                if ($ambil->jawaban3 == '') { 
+                                    $konten = '<div style="display:none;"></div>';
+                                    array_push($a,$konten);
+                                } else {
                                     if (select_jawaban_multi($butir_soal_id, $user_id,'jawaban3') == 'ya') {
                                         $select = "checked";
                                     } else {
                                         $select = "";
                                     }
+
+                                    $konten = '<div class="checkbox">
+                                  <label><input type="checkbox" name="jwb" nilai="'.$ambil->bobot_jawaban3 .'" value="jawaban3" butir_soal_id="'.$butir_soal_id .'" '.$select .'>'.$ambil->jawaban3 .'</label>
+                                </div>';
+                                    array_push($a, $konten);
+                                }
                                 ?>
-                                <div class="checkbox">
-                                  <label><input type="checkbox" name="jwb" nilai="<?php echo $ambil->bobot_jawaban3 ?>" value="jawaban3" butir_soal_id="<?php echo $butir_soal_id ?>" <?php echo $select ?>><?php echo $ambil->jawaban3 ?></label>
-                                </div>
-                                <?php } ?>
+                                
                                 <?php 
-                                if ($ambil->jawaban4 == '') { } else {
+                                if ($ambil->jawaban4 == '') { 
+                                    $konten = '<div style="display:none;"></div>';
+                                    array_push($a,$konten);
+                                } else {
                                     if (select_jawaban_multi($butir_soal_id, $user_id,'jawaban4') == 'ya') {
                                         $select = "checked";
                                     } else {
                                         $select = "";
                                     }
+
+                                    $konten = '<div class="checkbox">
+                                  <label><input type="checkbox" name="jwb" nilai="'. $ambil->bobot_jawaban4 .'" value="jawaban4" butir_soal_id="'. $butir_soal_id .'" '. $select .'>'. $ambil->jawaban4 .'</label>
+                                </div>';
+                                    array_push($a, $konten);
+                                }
                                 ?>
-                                <div class="checkbox">
-                                  <label><input type="checkbox" name="jwb" nilai="<?php echo $ambil->bobot_jawaban4 ?>" value="jawaban4" butir_soal_id="<?php echo $butir_soal_id ?>" <?php echo $select ?>><?php echo $ambil->jawaban4 ?></label>
-                                </div>
-                                <?php } ?>
                                 <?php 
-                                if ($ambil->jawaban5 == '') { } else {
+                                if ($ambil->jawaban5 == '') { 
+                                    $konten = '<div style="display:none;"></div>';
+                                    array_push($a,$konten);
+                                } else {
                                     if (select_jawaban_multi($butir_soal_id, $user_id,'jawaban5')== 'ya') {
                                         $select = "checked";
                                     } else {
                                         $select = "";
                                     }
+                                    $konten = '<div class="checkbox">
+                                  <label><input type="checkbox" name="jwb" nilai="'. $ambil->bobot_jawaban5 .'" value="jawaban5" butir_soal_id="'. $butir_soal_id .'" '. $select .'>'. $ambil->jawaban5 .'</label>
+                                </div>';
+                                    array_push($a, $konten);
+                                }
                                 ?>
-                                <div class="checkbox">
-                                  <label><input type="checkbox" name="jwb" nilai="<?php echo $ambil->bobot_jawaban5 ?>" value="jawaban5" butir_soal_id="<?php echo $butir_soal_id ?>" <?php echo $select ?>><?php echo $ambil->jawaban5 ?></label>
-                                </div>
-                                <?php } ?>
                                 <?php 
-                                if ($ambil->jawaban6 == '') { } else {
+                                if ($ambil->jawaban6 == '') {
+                                    $konten = '<div style="display:none;"></div>';
+                                    array_push($a,$konten);
+                                 } else {
                                     if (select_jawaban_multi($butir_soal_id, $user_id,'jawaban6')== 'ya') {
                                         $select = "checked";
                                     } else {
                                         $select = "";
                                     }
+                                    $konten = '<div class="checkbox">
+                                  <label><input type="checkbox" name="jwb" nilai="'. $ambil->bobot_jawaban6 .'" value="jawaban6" butir_soal_id="'. $butir_soal_id .'" '. $select .'>'. $ambil->jawaban6 .'</label>
+                                </div>';
+                                    array_push($a, $konten);
+                                }
+                                
+                                //tampilkan jawaban random
+                                if ($random_jwb == 'ya') {
+                                    shuffle($a);
+                                }
+                                
+                                echo $a[0];
+                                echo $a[1];
+                                echo $a[2];
+                                echo $a[3];
+                                echo $a[4];
+                                echo $a[5];
+                                
+
                                 ?>
-                                <div class="checkbox">
-                                  <label><input type="checkbox" name="jwb" nilai="<?php echo $ambil->bobot_jawaban6 ?>" value="jawaban6" butir_soal_id="<?php echo $butir_soal_id ?>" <?php echo $select ?>><?php echo $ambil->jawaban6 ?></label>
-                                </div>
-                                <?php } ?>
+
                                 <div style="text-align: right;">
                                     <a class="btn btn-primary" id="simpan_jawaban" butir_soal_id="<?php echo $butir_soal_id ?>"> Simpan Jawaban</a>
                                 </div>

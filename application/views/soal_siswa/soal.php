@@ -18,6 +18,7 @@
 
 	$keyboard = get_data('paket_soal','paket_soal_id',$paket_soal_id,'keyboard');
 	$klik_kanan = get_data('paket_soal','paket_soal_id',$paket_soal_id,'klik_kanan');
+	$random_jawaban = get_data('paket_soal','paket_soal_id',$paket_soal_id,'random_jawaban');
 	
 
 	$ambil_jam_mulai = $this->db->get_where('skor', array('skor_id'=>$skor_id))->row()->waktu_mulai;
@@ -108,7 +109,7 @@
 	$(document).ready(function() {
 
 		//load soal pertama
-		$.get('app/ambil_soal_ujian/<?php echo $first->butir_soal_id ?>/1', function(data) {
+		$.get('app/ambil_soal_ujian/<?php echo $first->butir_soal_id ?>/1/<?php echo $random_jawaban ?>', function(data) {
 			$('#soal').html(data);
 
 			//hidden previous
@@ -198,7 +199,7 @@
 			// alert('Klik ID'+ <?php echo $row->butir_soal_id ?>);
 
 			$.ajax({
-				url: 'app/ambil_soal_ujian/<?php echo $row->butir_soal_id ?>/<?php echo $no; ?>',
+				url: 'app/ambil_soal_ujian/<?php echo $row->butir_soal_id ?>/<?php echo $no; ?>/<?php echo $random_jawaban ?>',
 				type: 'GET'
 			})
 			.done(function(respon) {
@@ -248,7 +249,7 @@
 			// alert('Klik ID'+ <?php echo $row->butir_soal_id ?>);
 
 			$.ajax({
-				url: 'app/ambil_soal_ujian/<?php echo $row->butir_soal_id ?>/<?php echo $no; ?>',
+				url: 'app/ambil_soal_ujian/<?php echo $row->butir_soal_id ?>/<?php echo $no; ?>/<?php echo $random_jawaban ?>',
 				type: 'GET'
 			})
 			.done(function(respon) {
