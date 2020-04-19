@@ -56,21 +56,58 @@ if ($status_soal == 'essay') {
 	<td><?php echo ++$no; ?></td>
 	<td><?php echo $retVal = ($nama_user == '') ? 'User telah dihapus' : $nama_user ; ?></td>
 	<?php 
-	foreach ($this->db->get_where('skor_detail', array('skor_id'=>$rw->skor_id))->result() as $key => $value) {
-		$ket_nilai = ($value->nilai % 2 == 0) ? 'benar' : 'salah' ;
-		$nilai = ($status_soal == 'ganda') ? $ket_nilai : $value->nilai ;
-		if ($ket_nilai == 'benar') {
-			$total_benar++;
-		} else {
-			$total_salah++;
+	$nilai = '';
+
+	// soal biasa (hanya bisa 1 jawaban)
+	foreach ($this->db->get_where('butir_soal', array('soal_id'=>get_data('item_soal','paket_soal_id',$paket_soal_id,'soal_id')))->result() as $value) {
+		$skor_detail = $this->db->get_where('skor_detail', array('skor_id'=>$rw->skor_id,'butir_soal_id'=>$value->butir_soal_id));
+		
+		if ($status_soal == 'biasa') {
+			if ($skor_detail->num_rows() > 0) {
+				?>
+				<td><?php echo $skor_detail->row()->nilai ?></td>
+				<?php
+			} else {
+				?>
+				<td>0</td>
+				<?php
+			}
 		}
-		?>
-		<td><?php echo $retVal = ($status_soal == 'essay') ? $value->jawaban : $nilai; ?></td>
 
+		if ($status_soal == 'ganda') {
 
+			if ($skor_detail->num_rows() > 0) {
+				$ket_nilai = ($skor_detail->row()->nilai % 2 == 0) ? 'benar' : 'salah' ;
+				if ($ket_nilai == 'benar') {
+					$total_benar++;
+				} else {
+					$total_salah++;
+				}
+				?>
+				<td><?php echo $ket_nilai ?></td>
+				<?php
+			} else {
+				$total_salah++;
+				?>
+				<td>salah</td>
+				<?php
+			}
+		}
 
-		<?php
+		if ($status_soal == 'essay') {
+			if ($skor_detail->num_rows() > 0) {
+				?>
+				<td><?php echo $skor_detail->row()->jawaban ?></td>
+				<?php
+			} else {
+				?>
+				<td>tidak ada jawaban</td>
+				<?php
+			}
+		}
+
 	}
+
 	 ?>
 		<!-- jika soal ganda multi pilih -->
 			<?php if ($status_soal == 'ganda'): ?>
