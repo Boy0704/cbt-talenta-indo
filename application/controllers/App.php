@@ -18,7 +18,7 @@ class App extends CI_Controller {
 
     public function export_skor_ujian($paket_soal_id)
     {
-        $status_soal = get_data('butir_soal','soal_id',get_data('item_soal','paket_soal_id',$paket_soal_id,'soal_id'),'status_soal');
+        $status_soal = get_data('soal','soal_id',get_data('item_soal','paket_soal_id',$paket_soal_id,'soal_id'),'status_soal');
         $data = array(
             'status_soal'=>$status_soal,
             'paket_soal_id' => $paket_soal_id,
@@ -144,7 +144,7 @@ class App extends CI_Controller {
     	$data = array(
     		'userid' => $userid,
     		// 'query' => $this->db->get_where('akses_batch', array('batch_id'=>base64_decode($batch_id))),
-    		'query' => $this->db->query("SELECT * FROM akses_batch, paket_soal where akses_batch.paket_soal_id=paket_soal.paket_soal_id and akses_batch.batch_id='$batchid' and akses_batch.user_id='$userid' AND paket_soal.status_paket = 1 "),
+    		'query' => $this->db->query("SELECT * FROM akses_batch, paket_soal where akses_batch.paket_soal_id=paket_soal.paket_soal_id and akses_batch.batch_id='$batchid' and akses_batch.user_id='$userid' AND paket_soal.status_paket = 1 order by paket_soal.paket_soal_id ASC "),
     		'judul_page' => 'Paket Soal',
             'konten' => 'soal_siswa/paket_soal',
     	);
@@ -869,7 +869,18 @@ class App extends CI_Controller {
 			$cek_user = $this->db->query("SELECT * FROM user WHERE username='$username' and password='$password' ");
 			// if (password_verify($password, $hashed)) {
 			if ($cek_user->num_rows() > 0) {
+
+
 				foreach ($cek_user->result() as $row) {
+
+                    if ($row->is_login == '1') {
+                        ?>
+                        <script type="text/javascript">
+                            alert('Akun anda sedang login di perangkat lain, silahkan di logout terlebih dahulu !');
+                            window.location="<?php echo base_url('app/login'); ?>";
+                        </script>
+                        <?php
+                    }
 					
                     $sess_data['id_user'] = $row->user_id;
 					$sess_data['nama'] = $row->nama_lengkap;
@@ -881,6 +892,8 @@ class App extends CI_Controller {
 				// exit;
 				// $sess_data['username'] = $username;
 				// $this->session->set_userdata($sess_data);
+                $this->db->where('user_id', $this->session->userdata('user_id'));
+                $this->db->update('user', array('is_login'=>'1'));
 
 				redirect('app/index');
 			} else {
@@ -1023,6 +1036,9 @@ and skor_detail.butir_soal_id=butir_soal.butir_soal_id and skor.user_id='$user_i
 
 	function logout()
 	{
+        $this->db->where('user_id', $this->session->userdata('user_id'));
+        $this->db->update('user', array('is_login'=>'0'));
+
 		$this->session->unset_userdata('id_user');
 		$this->session->unset_userdata('nama');
 		$this->session->unset_userdata('username');

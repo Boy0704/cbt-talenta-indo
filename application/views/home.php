@@ -45,5 +45,13 @@
                 <h2>Selamat Datang, <?php echo $this->session->userdata('nama'); ?></h2>
               </div>
             </div>
+
+            <?php if ($this->session->userdata('level') == 'siswa'): ?>
+              <div class="alert alert-success alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Info! </strong>Silahkan masuk ke menu Daftar Ujian dan pilih Batch kemudian pilih Paket Soal untuk dikerjakan .
+              </div>
+            <?php endif ?>
             
+
       

@@ -124,6 +124,14 @@
 				</div>
 				</form>
 				<div class="mt-4">
+
+					<div class="d-flex justify-content-center links">
+						<div class="alert alert-warning alert-dismissible">
+			                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			                <strong>Info! </strong>Hubungi kami jika belum memiliki username dan password .
+			              </div>
+					</div>
+
 					<!-- <div class="d-flex justify-content-center links">
 						Don't have an account? <a href="#" class="ml-2">Sign Up</a>
 					</div>

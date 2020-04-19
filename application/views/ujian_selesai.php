@@ -1,3 +1,12 @@
+<?php if ($this->session->userdata('level') == 'siswa'): ?>
+  <div class="alert alert-success alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Info! </strong>Silahkan masuk ke menu Daftar Ujian untuk mengerjakan paket soal yang lain yang belum selesai.
+Jika pada menu Daftar Ujian tidak ada batch soal yang bisa dipilih, maka anda telah menyelesaikan seluruh ujian.
+ .
+  </div>
+<?php endif ?>
+
 <table class="table table-bordered tabel-data" style="margin-bottom: 10px">
             <thead>
             <tr>
