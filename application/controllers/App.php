@@ -873,6 +873,8 @@ class App extends CI_Controller {
 
 				foreach ($cek_user->result() as $row) {
 
+
+
                     if ($row->is_login == '1') {
                         ?>
                         <script type="text/javascript">
@@ -880,6 +882,7 @@ class App extends CI_Controller {
                             window.location="<?php echo base_url('app/login'); ?>";
                         </script>
                         <?php
+                        exit;
                     }
 					
                     $sess_data['id_user'] = $row->user_id;
@@ -892,7 +895,7 @@ class App extends CI_Controller {
 				// exit;
 				// $sess_data['username'] = $username;
 				// $this->session->set_userdata($sess_data);
-                $this->db->where('user_id', $this->session->userdata('user_id'));
+                $this->db->where('user_id', $this->session->userdata('id_user'));
                 $this->db->update('user', array('is_login'=>'1'));
 
 				redirect('app/index');
@@ -1036,7 +1039,7 @@ and skor_detail.butir_soal_id=butir_soal.butir_soal_id and skor.user_id='$user_i
 
 	function logout()
 	{
-        $this->db->where('user_id', $this->session->userdata('user_id'));
+        $this->db->where('user_id', $this->session->userdata('id_user'));
         $this->db->update('user', array('is_login'=>'0'));
 
 		$this->session->unset_userdata('id_user');
