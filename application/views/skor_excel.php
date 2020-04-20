@@ -43,6 +43,13 @@ if ($status_soal == 'essay') {
 
 		<!-- batas multi pilih -->
 
+		<!-- jika soal ganda 1 pilihan -->
+		<?php if ($status_soal == 'biasa'): ?>
+		<td>Total Skor</td>
+		<?php endif ?>
+
+		<!-- batas multi pilih -->
+
 	</tr>
 	<?php 
 	$no = 0;
@@ -51,6 +58,7 @@ if ($status_soal == 'essay') {
 		$nama_user = get_data('user','user_id',$rw->user_id,'nama_lengkap');
 		$total_benar = 0;
 		$total_salah = 0;
+		$total_skor = 0;
 	 ?>
 	 <tr>
 	<td><?php echo ++$no; ?></td>
@@ -64,6 +72,7 @@ if ($status_soal == 'essay') {
 		
 		if ($status_soal == 'biasa') {
 			if ($skor_detail->num_rows() > 0) {
+				$total_skor = $total_skor + $skor_detail->row()->nilai;
 				?>
 				<td><?php echo $skor_detail->row()->nilai ?></td>
 				<?php
@@ -113,6 +122,13 @@ if ($status_soal == 'essay') {
 			<?php if ($status_soal == 'ganda'): ?>
 			<td><?php echo $total_benar ?></td>
 			<td><?php echo $total_salah ?></td>
+			<?php endif ?>
+
+		<!-- batas multi pilih -->
+
+		<!-- jika soal ganda multi pilih -->
+			<?php if ($status_soal == 'biasa'): ?>
+			<td><?php echo $total_skor ?></td>
 			<?php endif ?>
 
 		<!-- batas multi pilih -->
