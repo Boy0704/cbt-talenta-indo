@@ -46,11 +46,11 @@ if ($status_soal == 'essay') {
 	</tr>
 	<?php 
 	$no = 0;
-	$total_benar = 0;
-	$total_salah = 0;
+	
 	foreach ($this->db->get_where('skor', array('paket_soal_id'=>$paket_soal_id,'status'=>1))->result() as $rw) {
 		$nama_user = get_data('user','user_id',$rw->user_id,'nama_lengkap');
-
+		$total_benar = 0;
+		$total_salah = 0;
 	 ?>
 	 <tr>
 	<td><?php echo ++$no; ?></td>
