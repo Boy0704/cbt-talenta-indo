@@ -62,7 +62,7 @@ if ($status_soal == 'essay') {
 	 ?>
 	 <tr>
 	<td><?php echo ++$no; ?></td>
-	<td><?php echo $retVal = ($nama_user == '') ? 'User telah dihapus' : $nama_user ; ?></td>
+	<td><?php echo $rw->skor_id //$retVal = ($nama_user == '') ? 'User telah dihapus' : $nama_user ; ?></td>
 	<?php 
 	$nilai = '';
 
@@ -86,7 +86,7 @@ if ($status_soal == 'essay') {
 		if ($status_soal == 'ganda') {
 
 			if ($skor_detail->num_rows() > 0) {
-				$ket_nilai = ($skor_detail->row()->nilai % 2 == 0) ? 'benar' : 'salah' ;
+				$ket_nilai = ($skor_detail->row()->nilai % 2 == 0 && $skor_detail->row()->nilai != 0 ) ? 'benar' : 'salah' ;
 				if ($ket_nilai == 'benar') {
 					$total_benar++;
 				} else {
